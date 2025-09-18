@@ -10,7 +10,7 @@
             <a class="navbar-brand" href="{{url('/')}}">Es Kelapa</a>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}" class="nav-link">Dashboard</a>
+                    <a href="{{ Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}" class="nav-link">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{route('product.index')}}" class="nav-link">Produk</a>
@@ -19,7 +19,7 @@
                     <a href="{{route('material.index')}}" class="nav-link">Bahan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link"></a>
+                    <a href="{{route('users.index')}}" class="nav-link">Pengguna</a>
                 </li>
             </ul>
         </div>
