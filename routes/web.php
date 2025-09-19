@@ -6,6 +6,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register.form');
@@ -14,10 +18,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Admin & CRUD User
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', function() {
+    Route::get('/admin/dashboard', function () {
         return view('dashboard.admin');
     })->name('admin.dashboard');
-
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
@@ -33,4 +36,4 @@ Route::middleware(['auth'])->group(function () {
 
 Route::resource('product', ProductController::class);
 Route::resource('material', MaterialController::class);
-
+Route::resource('users', UserController::class);

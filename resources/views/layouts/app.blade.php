@@ -19,7 +19,9 @@
                     <a href="{{route('material.index')}}" class="nav-link">Bahan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('users.index')}}" class="nav-link">Pengguna</a>
+                    @if(Auth::user()->hak === 'admin')
+                        <a href="{{ route('users.index') }}">Kelola Pengguna</a>
+                    @endif
                 </li>
             </ul>
         </div>
