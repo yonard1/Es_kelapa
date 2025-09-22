@@ -20,8 +20,14 @@
                 </li>
                 <li class="nav-item">
                     @if(Auth::user()->hak === 'admin')
-                        <a href="{{ route('users.index') }}">Kelola Pengguna</a>
+                        <a href="{{ route('users.index') }}" class="nav-link">Kelola Pengguna</a>
                     @endif
+                </li>
+                <li class="nav-item">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="nav-link btn btn-sm bg-primary">Logout</button>
+                    </form>
                 </li>
             </ul>
         </div>
