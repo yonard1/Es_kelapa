@@ -5,6 +5,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PembelianController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,3 +38,4 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('product', ProductController::class);
 Route::resource('material', MaterialController::class);
 Route::resource('users', UserController::class);
+Route::resource('pembelian', PembelianController::class);

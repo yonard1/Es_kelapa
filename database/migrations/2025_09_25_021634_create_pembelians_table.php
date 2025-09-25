@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->enum('hak',['admin','kasir'])->default('kasir');
+        Schema::create('pembelians', function (Blueprint $table) {
+            $table->id('id_pembelian');
+            $table->unsignedBigInteger('id_user');              $table->date('tanggal');
+            $table->decimal('total', 12, 2)->default(0);
             $table->timestamps();
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('pembelians');
     }
 };

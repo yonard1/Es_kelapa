@@ -9,6 +9,9 @@ class Material extends Model
 {
     use HasFactory;
     protected $table = 'materials';
-    protected $primaryKey = 'id_bahan';
+    protected $primaryKey = 'bahan_id';
     protected $fillable = ['nama_bahan', 'satuan', 'stok', 'harga'];
+    public function PembelianDetails(){
+        return $this->hasMany(PembelianDetail::class, 'bahan_id');
+    }
 }
