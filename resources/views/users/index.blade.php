@@ -35,9 +35,9 @@
                     </form>
                 </td>
             </tr>
-            @include('users.modal_edit', ['users' => $u]);
+            @include('users.modal_edit', ['users' => $u])
         @endforeach
     </table>
 </div>
-
+@include ('users.modal_create', ['users' => $u])
 @endsection

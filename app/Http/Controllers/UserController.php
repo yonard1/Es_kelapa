@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -13,9 +14,9 @@ class UserController extends Controller
     }
 
     public function store(Request $request){
-        $request -> validate([
-            'name' => 'required',
-            'username' => 'required|string|unique:users',
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users,username',
             'password' => 'required|min:5',
             'hak' => 'required|in:admin,kasir',
         ]);
@@ -26,22 +27,25 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'hak' => $request->hak,
         ]);
+
+        return redirect()->back()->with('success', 'User berhasil ditambahkan');
     }
 
     public function update(Request $request, $id){
         $user = User::findOrFail($id);
 
-        $request -> validate([
-            'name' => 'required',
-            'username' => 'required|string|unique:users'.$user->id,
-            'role' => 'required|in:admin,kasir',
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users,username,' . $user->id,
+            'hak' => 'required|in:admin,kasir',
         ]);
 
         $data = $request->only(['name', 'username', 'hak']);
-        if($request -> password){
+        if($request->password){
             $data['password'] = Hash::make($request->password);
         }
-        $user -> update($data);
+
+        $user->update($data);
 
         return redirect()->back()->with('success', 'Berhasil mengupdate user');
     }
