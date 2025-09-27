@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pembelian extends Model
 {
+    use HasFactory;
+    protected $table = 'pembelians';
     protected $primaryKey = 'id_pembelian';
     protected $fillable = ['id_user', 'tanggal', 'total'];
 

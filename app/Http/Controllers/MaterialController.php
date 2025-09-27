@@ -13,6 +13,10 @@ class MaterialController extends Controller
         return view('material.index', compact('materials'));
     }
 
+    public function create(){
+        return view('material.modal_create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
