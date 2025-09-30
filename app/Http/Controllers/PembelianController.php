@@ -10,9 +10,9 @@ use Illuminate\Http\Request;
 
 class PembelianController extends Controller
 {
-   public function index()
+    public function index()
     {
-        $pembelians = Pembelian::with(['user', 'details.material'])->latest()->get();
+        $pembelians = Pembelian::with(['user', 'details.bahan'])->latest()->get();
         $materials = Material::all();
         return view('pembelian.index', compact('pembelians', 'materials'));
     }

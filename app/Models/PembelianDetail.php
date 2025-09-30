@@ -10,7 +10,7 @@ class PembelianDetail extends Model
     use HasFactory;
     protected $table = 'pembelian_details';
     protected $primaryKey = 'id_detail';
-    protected $fillable = ['id_pembelian', 'id_bahan', 'jumlah', 'harga'];
+    protected $fillable = ['id_pembelian', 'id_bahan', 'jumlah', 'harga', 'subtotal'];
 
     public function pembelian()
     {
