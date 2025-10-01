@@ -24,9 +24,19 @@ class MaterialController extends Controller
             'stok' => 'required|numeric',
             'satuan' => 'required',
             'harga' => 'required|numeric',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        Material::create($request->all());
+        $data = $request->only(['nama_bahan', 'stok', 'satuan', 'harga']);
+
+        if($request->hasFile('foto')){
+            $filename = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('upload/material'), $filename);
+            $data['foto'] = $filename;
+        }
+        
+        Material::create($data);
+
         return redirect()->route('material.index')->with('success', 'Bahan berhasil ditambahkan!');
     }
 
@@ -37,14 +47,26 @@ class MaterialController extends Controller
             'stok' => 'required|numeric',
             'satuan' => 'required',
             'harga' => 'required|numeric',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $material->update($request->all());
+        if($request->hasFile('foto')){
+            if($material->foto && file_exists(public_path('upload/material/'.$material->foto))){
+                unlink(public_path('upload/material/'.$material->foto));
+            }
+            $filename = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('upload/material'), $filename);
+            $data['foto'] = $filename;
+        }
+        $material->update($data);
         return redirect()->route('material.index')->with('success', 'Bahan berhasil diperbarui!');
     }
 
     public function destroy(Material $material)
     {
+        if($material->foto && file_exists(public_path('upload/material/'.$material->foto))){
+            unlink(public_path('upload/material/'.$material->foto));
+        }
         $material->delete();
         return redirect()->route('material.index')->with('success', 'Bahan berhasil dihapus!');
     }

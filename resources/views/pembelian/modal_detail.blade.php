@@ -1,4 +1,3 @@
-
 <!-- Modal Detail -->
 <div class="modal fade" id="detail{{ $pembelian->id_pembelian }}" tabindex="-1">
     <div class="modal-dialog modal-lg">

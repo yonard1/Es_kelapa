@@ -10,7 +10,7 @@ class Material extends Model
     use HasFactory;
     protected $table = 'materials';
     protected $primaryKey = 'id_bahan';
-    protected $fillable = ['nama_bahan', 'satuan', 'stok', 'harga'];
+    protected $fillable = ['nama_bahan', 'satuan', 'stok', 'harga', 'foto'];
     public function PembelianDetails(){
         return $this->hasMany(PembelianDetail::class, 'id_bahan');
     }

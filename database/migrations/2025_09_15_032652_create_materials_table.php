@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('satuan');
             $table->decimal('stok', 10,2) -> default(0);
             $table->decimal('harga', 12,2);
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

@@ -5,7 +5,7 @@
                 <h5 class="modal-title">Edit Produk</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('product.update', $products->id_produk) }}" method="POST">
+            <form action="{{ route('product.update', $products->id_produk) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -18,8 +18,13 @@
                         <input type="number" step="0.01" name="harga" value="{{ $products->harga }}" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label>Stok</label>
-                        <input type="number" name="stok" value="{{ $products->stok }}" class="form-control" required>
+                        <label>Foto</label>
+                        @if($products -> foto)
+                            <br>
+                            <img src="{{asset('upload/produk/'.$products->foto)}}" width="100" class="mb-2">
+                        @endif
+                        <input type="file" name="foto" value="{{ $products->foto }}" class="form-control" accept="image/*">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengganti foto.</small>
                     </div>
                 </div>
                 <div class="modal-footer">

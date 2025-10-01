@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_produk');
             $table->string('nama_produk');
             $table->decimal('harga', 12,2);
-            $table->integer('stok');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

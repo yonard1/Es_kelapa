@@ -5,7 +5,7 @@
                 <h5 class="modal-title">Tambah Produk</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('product.store') }}" method="POST">
+            <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -17,8 +17,8 @@
                         <input type="number" step="0.01" name="harga" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label>Stok</label>
-                        <input type="number" name="stok" class="form-control" required>
+                        <label>Foto</label>
+                        <input type="file" name="foto" class="form-control" accept="image/*">
                     </div>
                 </div>
                 <div class="modal-footer">

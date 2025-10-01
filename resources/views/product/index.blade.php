@@ -15,6 +15,7 @@
             <th>Nama Produk</th>
             <th>Harga</th>
             <th>Stok</th>
+            <th>Foto</th>
             <th>Aksi</th>
         </tr>
         @foreach($products as $p)
@@ -23,6 +24,13 @@
             <td>{{ $p->nama_produk }}</td>
             <td>Rp. {{ number_format($p->harga, 0, ',', '.') }}</td>
             <td>{{ $p->stok }}</td>
+            <td>
+                @if ($p -> foto)
+                    <img src="{{asset('upload/produk/' . $p -> foto)}}" alt="foto" width="70">
+                @else
+                    <span class="text-muted">No Image</span>
+                @endif
+            </td>
             <td>
                 <!-- Tombol Edit -->
                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $p->id_produk }}">Edit</button>

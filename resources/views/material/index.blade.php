@@ -13,6 +13,7 @@
                 <th>Nama Bahan</th>
                 <th>Satuan</th>
                 <th>Stok</th>
+                <th>Foto</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -23,6 +24,13 @@
                 <td>{{ $m->nama_bahan }}</td>
                 <td>{{ $m->satuan }}</td>
                 <td>{{ $m->stok }}</td>
+                <td>
+                @if ($m -> foto)
+                    <img src="{{asset('upload/material/' . $m -> foto)}}" alt="foto" width="70">
+                @else
+                    <span class="text-muted">No Image</span>
+                @endif
+            </td>
                 <td>
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $m->id_bahan }}">Edit</button>
                     <form action="{{ route('material.destroy', $m->id_bahan) }}" method="POST" style="display:inline;">
