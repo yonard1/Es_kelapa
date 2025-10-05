@@ -83,6 +83,7 @@
             <a href="{{ route('users.index') }}"> Kelola Pengguna </a>
         @endif
         <a href="{{route('pembelian.index')}}">Pembelian</a>
+        <a href="{{route('transaksi.index')}}">Transaksi</a>
         <form action="{{ route('logout') }}" method="POST" class="mt-3 text-center">
             @csrf
             <button type="submit" class="btn btn-sm btn-light">Logout</button>

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\TransaksiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,3 +40,6 @@ Route::resource('product', ProductController::class);
 Route::resource('material', MaterialController::class);
 Route::resource('users', UserController::class);
 Route::resource('pembelian', PembelianController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('transaksi', TransaksiController::class);
+});
