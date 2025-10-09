@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Pembelian;
 use Carbon\Carbon;
 use DB;
 
@@ -12,31 +13,36 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Hari ini
+        $user = auth()->user();
         $today = Carbon::today();
-        // Bulan ini
-        $month = Carbon::now()->month;
-        $year = Carbon::now()->year;
 
-        // Total pendapatan hari ini
-        $pendapatanHarian = Transaksi::whereDate('tanggal', $today)->sum('total_harga');
+        if($user->hak == 'admin'){
+            $totalPenjualanHariIni = Transaksi::whereDate('tanggal', $today) -> sum('total');
+            $totalPembelianBulanIni = Pembelian::whereMonth('tanggal', $today->month) -> sum('total');
+            $totalTransaksiBulanIni = Transaksi::whereMonth('tanggal', $today->month) -> sum('total');
 
-        // Total pendapatan bulan ini
-        $pendapatanBulanan = Transaksi::whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
-            ->sum('total_harga');
+            return view('dashboard.admin', compact(
+                'totalPenjualanHariIni',
+                'totalPembelianBulanIni',
+                'totalTransaksiBulanIni'
+            ));
+        }
+        else {
 
-        // Laporan harian (misal untuk chart nanti)
-        $laporanHarian = Transaksi::select(
-                DB::raw('DATE(tanggal) as tanggal'),
-                DB::raw('SUM(total_harga) as total')
-            )
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
-            ->groupBy('tanggal')
-            ->orderBy('tanggal', 'asc')
-            ->get();
+            // Total penjualan kasir hari ini
+            $totalPenjualanKasirHariIni = Transaksi::where('user_id', $user->id)
+                ->whereDate('tanggal', $today)
+                ->sum('total');
 
-        return view('dashboard', compact('pendapatanHarian', 'pendapatanBulanan', 'laporanHarian'));
+            // Total transaksi kasir hari ini
+            $totalTransaksiKasirHariIni = Transaksi::where('user_id', $user->id)
+                ->whereDate('tanggal', $today)
+                ->count();
+
+            return view('dashboard.kasir', compact(
+                'totalPenjualanKasirHariIni',
+                'totalTransaksiKasirHariIni'
+            ));
+        }
     }
 }

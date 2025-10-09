@@ -32,19 +32,26 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Akun Berhasil dibuat');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $credentials = $request->only('username', 'password');
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            if(Auth::user()->hak === 'admin'){
+            // Cek hak akses user dan arahkan ke dashboard masing-masing
+            if (Auth::user()->hak === 'admin') {
                 return redirect()->route('admin.dashboard');
-            } else {
+            } elseif (Auth::user()->hak === 'kasir') {
                 return redirect()->route('kasir.dashboard');
+            } else {
+                // Jika ada role lain di masa depan
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'username' => 'Hak akses tidak dikenali.',
+                ]);
             }
         }
-
 
         return back()->withErrors([
             'username' => 'Username atau password salah',

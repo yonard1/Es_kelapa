@@ -1,46 +1,65 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MaterialController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PembelianController;
-use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\{
+    MaterialController,
+    ProductController,
+    AuthController,
+    UserController,
+    PembelianController,
+    TransaksiController,
+    DashboardController
+};
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// ===================== HALAMAN UMUM =====================
+Route::get('/', fn() => view('welcome'))->name('home');
 
+// ==================
+// Auth (Login & Register)
+// ==================
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard Admin & CRUD User
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('dashboard.admin');
-    })->name('admin.dashboard');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-});
-
-// Dashboard Kasir
+// ==================
+// Dashboard (Admin & Kasir)
+// ==================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/kasir/dashboard', function() {
-        return view('dashboard.kasir');
-    })->name('kasir.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+        ->name('admin.dashboard');
+
+    Route::get('/kasir/dashboard', [DashboardController::class, 'index'])
+        ->name('kasir.dashboard');
 });
 
-Route::resource('product', ProductController::class);
-Route::resource('material', MaterialController::class);
-Route::resource('users', UserController::class);
-Route::resource('pembelian', PembelianController::class);
-Route::middleware('auth')->group(function () {
+// ==================
+// CRUD & Modul Aplikasi
+// ==================
+Route::middleware(['auth'])->group(function () {
+
+    // Produk
+    Route::resource('product', ProductController::class);
+
+    // Bahan/material
+    Route::resource('material', MaterialController::class);
+
+    // Pembelian
+    Route::resource('pembelian', PembelianController::class);
+
+    // Transaksi + Struk
     Route::resource('transaksi', TransaksiController::class);
     Route::get('/transaksi/{id}/struk', [TransaksiController::class, 'struk'])->name('transaksi.struk');
 });
+
+// ==================
+// Admin Only
+// ==================
+Route::middleware(['auth', 'admin'])->group(function () {
+    // CRUD User (khusus admin)
+    Route::resource('users', UserController::class);
+});
+
