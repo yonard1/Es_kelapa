@@ -13,7 +13,7 @@ class Transaksi extends Model
 
     protected $table = 'transaksis';
     protected $primaryKey = 'id_transaksi';
-    protected $fillable = ['tanggal', 'total', 'user_id'];
+    protected $fillable = ['tanggal', 'total', 'user_id', 'bayar', 'kembalian'];
 
     // Relasi ke detail transaksi (1 transaksi bisa punya banyak detail)
     public function details()

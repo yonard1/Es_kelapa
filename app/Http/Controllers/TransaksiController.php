@@ -28,46 +28,61 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal' => 'required|date',
-            'produk_id.*' => 'required|exists:products,id_produk',
-            'qty.*'   => 'required|integer|min:1'
+        'tanggal' => 'required|date',
+        'produk_id.*' => 'required|exists:products,id_produk',
+        'qty.*'   => 'required|integer|min:1',
+        'bayar'   => 'required|numeric|min:0',
+    ]);
+
+    // Hitung total harga
+    $total = 0;
+    foreach ($request->produk_id as $key => $id_produk) {
+        $produk = Product::findOrFail($id_produk);
+        $subtotal = $produk->harga * $request->jumlah[$key];
+        $total += $subtotal;
+    }
+
+    // Cek apakah uang cukup
+    if ($request->bayar < $total) {
+        return redirect()->back()->with('error', 'Uang tidak cukup untuk melakukan transaksi!');
+    }
+
+    $kembalian = $request->bayar - $total;
+
+    // Simpan transaksi
+    $transaksi = Transaksi::create([
+        'user_id' => Auth::id(),
+        'tanggal' => $request->tanggal,
+        'total'   => $total,
+        'bayar'   => $request->bayar,
+        'kembalian' => $kembalian,
+    ]);
+
+    // Simpan detail transaksi
+    foreach ($request->produk_id as $key => $id_produk) {
+        $produk = Product::findOrFail($id_produk);
+        $subtotal = $produk->harga * $request->jumlah[$key];
+
+        DetailTransaksi::create([
+            'id_transaksi' => $transaksi->id_transaksi,
+            'id_produk'    => $id_produk,
+            'qty'          => $request->jumlah[$key],
+            'harga'        => $produk->harga,
+            'subtotal'     => $subtotal,
         ]);
+    }
 
-        // Hitung total
-        $total = 0;
-        foreach ($request->produk_id as $key => $id_produk) {
-            $produk = Product::findOrFail($id_produk);
-            $subtotal = $produk->harga * $request->jumlah[$key];
-            $total += $subtotal;
-        }
-
-        // Simpan transaksi
-        $transaksi = Transaksi::create([
-            'user_id' => Auth::id(),
-            'tanggal' => $request->tanggal,
-            'total'   => $total
-        ]);
-
-        // Simpan detail transaksi
-        foreach ($request->produk_id as $key => $id_produk) {
-            $produk = Product::findOrFail($id_produk);
-            $subtotal = $produk->harga * $request->jumlah[$key];
-
-            DetailTransaksi::create([
-                'id_transaksi' => $transaksi->id_transaksi,
-                'id_produk'    => $id_produk,
-                'qty'       => $request->jumlah[$key],
-                'harga' => $produk->harga,
-                'subtotal'     => $subtotal
-            ]);
-        }
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil ditambahkan.');
+    return redirect()->route('transaksi.struk', ['id' => $transaksi->id_transaksi]);
     }
 
     public function show($id)
     {
         $transaksi = Transaksi::with(['details.produk', 'user'])->findOrFail($id);
         return view('transaksi.show', compact('transaksi'));
+    }
+
+    public function struk($id){
+        $transaksi = Transaksi::with(['details.produk', 'user'])->findOrFail($id);
+        return view('transaksi.struk', compact('transaksi'));
     }
 }

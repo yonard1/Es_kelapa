@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable(); // kasir
             $table->date('tanggal');
             $table->decimal('total', 12, 2);
+            $table->integer('bayar')->default(0);
+            $table->integer('kembalian')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -42,4 +42,5 @@ Route::resource('users', UserController::class);
 Route::resource('pembelian', PembelianController::class);
 Route::middleware('auth')->group(function () {
     Route::resource('transaksi', TransaksiController::class);
+    Route::get('/transaksi/{id}/struk', [TransaksiController::class, 'struk'])->name('transaksi.struk');
 });
