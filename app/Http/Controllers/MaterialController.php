@@ -34,7 +34,7 @@ class MaterialController extends Controller
             $request->foto->move(public_path('upload/material'), $filename);
             $data['foto'] = $filename;
         }
-        
+
         Material::create($data);
 
         return redirect()->route('material.index')->with('success', 'Bahan berhasil ditambahkan!');
@@ -49,6 +49,8 @@ class MaterialController extends Controller
             'harga' => 'required|numeric',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $data = $request->only(['nama_bahan', 'stok', 'satuan', 'harga']);
 
         if($request->hasFile('foto')){
             if($material->foto && file_exists(public_path('upload/material/'.$material->foto))){

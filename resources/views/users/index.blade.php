@@ -4,7 +4,7 @@
 
 <div class="container">
     <h2>Data Pengguna</h2>
-    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createModal">Tambah Pengguna</button>
+    <button class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Tambah Pengguna</button>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

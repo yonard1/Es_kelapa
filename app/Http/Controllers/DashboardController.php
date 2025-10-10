@@ -7,24 +7,39 @@ use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pembelian;
 use Carbon\Carbon;
-use DB;
+use App\Models\Material;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $today = Carbon::today();
 
         if($user->hak == 'admin'){
-            $totalPenjualanHariIni = Transaksi::whereDate('tanggal', $today) -> sum('total');
-            $totalPembelianBulanIni = Pembelian::whereMonth('tanggal', $today->month) -> sum('total');
-            $totalTransaksiBulanIni = Transaksi::whereMonth('tanggal', $today->month) -> sum('total');
+        // Ambil bulan & tahun dari request, fallback ke bulan & tahun sekarang
+            $bulan = $request->input('bulan', $today->month);
+            $tahun = $request->input('tahun', $today->year);
+
+            $totalPenjualanHariIni = Transaksi::whereDate('tanggal', $today)->sum('total');
+
+            $totalPembelianBulanIni = Pembelian::whereMonth('tanggal', $bulan)
+                                                ->whereYear('tanggal', $tahun)
+                                                ->sum('total');
+
+            $totalTransaksiBulanIni = Transaksi::whereMonth('tanggal', $bulan)
+                                            ->whereYear('tanggal', $tahun)
+                                            ->sum('total');
+
+            $stokHampirHabis = Material::where('stok', '<=', 5)->get();
 
             return view('dashboard.admin', compact(
                 'totalPenjualanHariIni',
                 'totalPembelianBulanIni',
-                'totalTransaksiBulanIni'
+                'totalTransaksiBulanIni',
+                'bulan',
+                'tahun',
+                'stokHampirHabis'
             ));
         }
         else {
