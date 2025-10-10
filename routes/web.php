@@ -8,7 +8,8 @@ use App\Http\Controllers\{
     UserController,
     PembelianController,
     TransaksiController,
-    DashboardController
+    DashboardController,
+    LaporanController
 };
 
 // ===================== HALAMAN UMUM =====================
@@ -61,5 +62,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     // CRUD User (khusus admin)
     Route::resource('users', UserController::class);
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 });
 

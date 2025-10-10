@@ -66,7 +66,7 @@
                 <h5>Peringatan : Stok Hampir Habis</h5>
                 <ul>
                     @foreach ($stokHampirHabis as $bhn)
-                        <li>{{$bhn->nama_bahan}} : {{$bhn->stok}} tersisa</li>
+                        <li>{{$bhn->nama_bahan}} : {{$bhn->stok}} {{$bhn->satuan}} tersisa</li>
                     @endforeach
                 </ul>
             </div>

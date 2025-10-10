@@ -64,11 +64,6 @@
         transform: translateX(4px);
     }
 
-    .sidebar button.btn-light {
-        color: #2E7D32;
-        font-weight: 500;
-    }
-
     /* Sidebar collapsible */
     .sidebar-group {
         margin-bottom: 10px;
@@ -108,11 +103,39 @@
     }
 
     .sidebar-group.open .sidebar-links {
-        max-height: 500px; /* tinggi maksimal */
+        max-height: 500px;
     }
 
     .sidebar-group.open .arrow {
         transform: rotate(-90deg);
+    }
+
+    .sidebar-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 15px;
+    }
+
+    .btn-logout {
+        width: 100%;
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-logout:hover {
+        background: linear-gradient(135deg, #27ae60, #1e8449);
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-logout i {
+        vertical-align: middle;
     }
 
     /* Topbar */
@@ -182,7 +205,7 @@
         <h2>🥥 Es Kelapa</h2>
 
         <!-- Dashboard -->
-        <div class="sidebar-group">
+        <div class="sidebar-group {{ request()->is('dashboard*') ? 'open' : '' }}">
             <button class="sidebar-toggle">Dashboard <span class="arrow">▾</span></button>
             <div class="sidebar-links">
                 <a href="{{ Auth::check() && Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}" class="{{ request()->is('dashboard*') ? 'active' : '' }}">🏠 Dashboard</a>
@@ -190,7 +213,7 @@
         </div>
 
         <!-- Produk & Bahan -->
-        <div class="sidebar-group">
+        <div class="sidebar-group {{ request()->is('product*') || request()->is('material*') ? 'open' : '' }}">
             <button class="sidebar-toggle">Produk & Bahan <span class="arrow">▾</span></button>
             <div class="sidebar-links">
                 <a href="{{ route('product.index') }}" class="{{ request()->is('product*') ? 'active' : '' }}">🧃 Produk</a>
@@ -199,26 +222,27 @@
         </div>
 
         <!-- Transaksi -->
-        <div class="sidebar-group">
+        <div class="sidebar-group {{ request()->is('pembelian*') || request()->is('transaksi*') ? 'open' : '' }}">
             <button class="sidebar-toggle">Transaksi <span class="arrow">▾</span></button>
             <div class="sidebar-links">
-                <a href="{{route('pembelian.index')}}" class="{{ request()->is('pembelian*') ? 'active' : '' }}">🛒 Pembelian</a>
-                <a href="{{route('transaksi.index')}}" class="{{ request()->is('transaksi*') ? 'active' : '' }}">💰 Transaksi</a>
+                <a href="{{ route('pembelian.index') }}" class="{{ request()->is('pembelian*') ? 'active' : '' }}">🛒 Pembelian</a>
+                <a href="{{ route('transaksi.index') }}" class="{{ request()->is('transaksi*') ? 'active' : '' }}">💰 Transaksi</a>
             </div>
         </div>
 
         <!-- Laporan -->
-        {{-- <div class="sidebar-group">
-            <button class="sidebar-toggle">Laporan <span class="arrow">▾</span></button>
+        <div class="sidebar-group {{ request()->is('laporan*') ? 'open' : '' }}">
+            <button class="sidebar-toggle {{ request()->is('laporan*') ? 'active' : '' }}">
+                Laporan <span class="arrow">▾</span>
+            </button>
             <div class="sidebar-links">
-                <a href="{{ route('laporan.penjualan') }}" class="{{ request()->is('laporan/penjualan*') ? 'active' : '' }}">📊 Penjualan</a>
-                <a href="{{ route('laporan.pembelian') }}" class="{{ request()->is('laporan/pembelian*') ? 'active' : '' }}">🧾 Pembelian</a>
+                <a href="{{ route('laporan.index') }}" class="{{ request()->is('laporan*') ? 'active' : '' }}">📑 Laporan Penjualan & Pembelian</a>
             </div>
-        </div> --}}
+        </div>
 
         <!-- Admin -->
         @if(Auth::check() && Auth::user()->hak === 'admin')
-        <div class="sidebar-group">
+        <div class="sidebar-group {{ request()->is('users*') ? 'open' : '' }}">
             <button class="sidebar-toggle">Admin <span class="arrow">▾</span></button>
             <div class="sidebar-links">
                 <a href="{{ route('users.index') }}" class="{{ request()->is('users*') ? 'active' : '' }}">👥 Pengguna</a>
@@ -227,10 +251,14 @@
         @endif
 
         <!-- Logout -->
-        <form action="{{ route('logout') }}" method="POST" class="mt-3 text-center">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-light w-100">Logout</button>
-        </form>
+        <div class="sidebar-footer mt-auto p-3 text-center">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-logout">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+            </form>
+        </div>
     </div>
 
     <!-- Topbar -->
@@ -259,22 +287,24 @@
     const toggleBtn = document.getElementById('menuToggle');
     const sidebar = document.getElementById('sidebar');
 
+    // Toggle sidebar on mobile
     toggleBtn.addEventListener('click', () => {
         sidebar.classList.toggle('active');
     });
 
-    // Collapse per grup + auto-collapse
+    // Sidebar dropdown behavior
     const groups = document.querySelectorAll('.sidebar-group');
-
     groups.forEach(group => {
         const toggle = group.querySelector('.sidebar-toggle');
         toggle.addEventListener('click', () => {
+            // Tutup grup lain
+            groups.forEach(g => {
+                if (g !== group) g.classList.remove('open');
+            });
+            // Buka/tutup grup yang diklik
             group.classList.toggle('open');
         });
     });
-
-    // Buka grup pertama default
-    if(groups[0]) groups[0].classList.add('open');
     </script>
-    </body>
+</body>
 </html>
