@@ -68,15 +68,21 @@
         </div>
 
         <button type="submit" class="btn btn-success">Simpan & Cetak Struk</button>
-        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Batal</a>
+        <a href="{{ route('transaksi.create') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 
 <script>
-document.getElementById('addRow').addEventListener('click', function() {
-    let tableBody = document.querySelector('#produkTable tbody');
-    let newRow = `
-        <tr>
+document.addEventListener('DOMContentLoaded', function () {
+    const tableBody = document.querySelector('#produkTable tbody');
+    const totalInput = document.getElementById('total');
+    const bayarInput = document.getElementById('bayar');
+    const kembalianInput = document.getElementById('kembalian');
+
+    // Tombol tambah produk
+    document.getElementById('addRow').addEventListener('click', function() {
+        let newRow = document.createElement('tr');
+        newRow.innerHTML = `
             <td>
                 <select name="produk_id[]" class="form-select produkSelect" required>
                     <option value="">-- pilih produk --</option>
@@ -89,44 +95,65 @@ document.getElementById('addRow').addEventListener('click', function() {
             </td>
             <td><input type="number" name="jumlah[]" class="form-control qtyInput" min="1" value="1" required></td>
             <td><button type="button" class="btn btn-danger btn-sm removeRow">Hapus</button></td>
-        </tr>
-    `;
-    tableBody.insertAdjacentHTML('beforeend', newRow);
-    updateTotal();
-});
-
-// Hapus row
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('removeRow')) {
-        e.target.closest('tr').remove();
-        updateTotal();
-    }
-});
-
-// Hitung total dan kembalian otomatis
-document.addEventListener('input', function(e) {
-    if (e.target.classList.contains('produkSelect') || e.target.classList.contains('qtyInput')) {
-        updateTotal();
-    }
-});
-
-function updateTotal() {
-    let total = 0;
-    document.querySelectorAll('#produkTable tbody tr').forEach(row => {
-        let select = row.querySelector('.produkSelect');
-        let qty = parseFloat(row.querySelector('.qtyInput').value) || 0;
-        let harga = parseFloat(select.selectedOptions[0]?.getAttribute('data-harga')) || 0;
-        total += harga * qty;
+        `;
+        tableBody.appendChild(newRow);
     });
-    document.getElementById('total').value = total;
-    hitungKembalian();
-}
 
-function hitungKembalian() {
-    let total = parseFloat(document.getElementById('total').value || 0);
-    let bayar = parseFloat(document.getElementById('bayar').value || 0);
-    let kembali = bayar - total;
-    document.getElementById('kembalian').value = kembali > 0 ? kembali : 0;
-}
+    // Hapus produk
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('removeRow')) {
+            e.target.closest('tr').remove();
+            updateTotal();
+        }
+    });
+
+    // Hitung ulang total setiap kali produk/jumlah berubah
+    document.addEventListener('input', function(e) {
+        if (e.target.classList.contains('produkSelect') || e.target.classList.contains('qtyInput')) {
+            validateDuplicateProduct();
+            updateTotal();
+        }
+    });
+
+    // Hitung kembalian saat input uang bayar berubah
+    bayarInput.addEventListener('input', hitungKembalian);
+
+    // === Fungsi bantu ===
+    function validateDuplicateProduct() {
+        let selects = document.querySelectorAll('.produkSelect');
+        let values = [];
+
+        for (let select of selects) {
+            let val = select.value;
+            if (val && values.includes(val)) {
+                alert('Produk ini sudah ditambahkan! Silakan ubah jumlahnya saja.');
+                select.value = '';
+                updateTotal();
+                return false;
+            }
+            if (val) values.push(val);
+        }
+        return true;
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('#produkTable tbody tr').forEach(row => {
+            let select = row.querySelector('.produkSelect');
+            let qty = parseFloat(row.querySelector('.qtyInput').value) || 0;
+            let harga = parseFloat(select.selectedOptions[0]?.getAttribute('data-harga')) || 0;
+            total += harga * qty;
+        });
+        totalInput.value = total.toFixed(0);
+        hitungKembalian(); // biar kembalian ikut update
+    }
+
+    function hitungKembalian() {
+        let total = parseFloat(totalInput.value || 0);
+        let bayar = parseFloat(bayarInput.value || 0);
+        let kembali = bayar - total;
+        kembalianInput.value = (kembali >= 0 ? kembali : 0).toFixed(0);
+    }
+});
 </script>
 @endsection

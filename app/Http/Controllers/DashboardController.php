@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Pembelian;
 use Carbon\Carbon;
 use App\Models\Material;
+use DB;
 
 class DashboardController extends Controller
 {
@@ -33,13 +34,59 @@ class DashboardController extends Controller
 
             $stokHampirHabis = Material::where('stok', '<=', 5)->get();
 
+            // 🔹 Hitung total penjualan & pembelian
+            $total_penjualan = $totalTransaksiBulanIni;
+            $total_pembelian = $totalPembelianBulanIni;
+
+            // 🔹 Hitung untung / rugi
+            $keuntungan = $total_penjualan - $total_pembelian;
+
+            $penjualanPerBulan = Transaksi::select(
+                DB::raw('MONTH(tanggal) as bulan'),
+                DB::raw('sum(total) as total')
+            )
+            ->whereYear('tanggal', $tahun)
+            ->groupBy('bulan')
+            ->pluck('total', 'bulan')
+            ->toArray();
+
+            $pembelianPerBulan = Pembelian::select(
+                DB::raw('MONTH(tanggal) as bulan'),
+                DB::raw('sum(total) as total')
+            )
+            ->whereYear('tanggal', $tahun)
+            ->groupBy('bulan')
+            ->pluck('total', 'bulan')
+            ->toArray();
+            
+            $bulanNama = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+            for ($i = 1; $i <= 12; $i++) {
+                $totalPenjualan = Transaksi::whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $i)
+                    ->sum('total');
+
+                $totalPembelian = Pembelian::whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $i)
+                    ->sum('total');
+
+                $dataPenjualan[] = (int) $totalPenjualan;
+                $dataPembelian[] = (int) $totalPembelian;
+            }
+
+            
+
             return view('dashboard.admin', compact(
                 'totalPenjualanHariIni',
                 'totalPembelianBulanIni',
                 'totalTransaksiBulanIni',
                 'bulan',
                 'tahun',
-                'stokHampirHabis'
+                'stokHampirHabis',
+                'keuntungan',
+                'dataPenjualan',
+                'dataPembelian',
+                'bulanNama'
             ));
         }
         else {

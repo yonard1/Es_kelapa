@@ -53,7 +53,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Transaksi + Struk
     Route::resource('transaksi', TransaksiController::class);
-    Route::get('/transaksi/{id}/struk', [TransaksiController::class, 'struk'])->name('transaksi.struk');
 });
 
 // ==================
@@ -63,5 +62,23 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // CRUD User (khusus admin)
     Route::resource('users', UserController::class);
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+});
+
+Route::middleware(['auth', 'kasir'])->group(function () {
+
+    // Halaman buat transaksi baru
+    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+
+    // Simpan transaksi (HARUS POST, bukan GET)
+    Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
+
+    // Lihat detail transaksi
+    Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
+
+    // Cetak struk transaksi
+    Route::get('/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('transaksi.cetak');
+
+    // Riwayat transaksi kasir
+    Route::get('/kasir/riwayat', [TransaksiController::class, 'riwayat'])->name('kasir.riwayat');
 });
 

@@ -13,6 +13,7 @@ class TransaksiController extends Controller
 {
     public function index()
     {
+        session()->forget('back_url'); // bersihkan supaya tidak nyangkut
         $transaksis = Transaksi::with('user')->orderBy('tanggal', 'desc')->paginate(10);
         return view('transaksi.index', compact('transaksis'));
     }
@@ -72,16 +73,45 @@ class TransaksiController extends Controller
         ]);
     }
 
-    return redirect()->route('transaksi.struk', ['id' => $transaksi->id_transaksi]);
+    if (!session()->has('back_url')) {
+        session(['back_url' => url()->previous()]);
+    }
+
+    $backUrl = session('back_url', route('transaksi.index'));
+
+    return view('transaksi.show', compact('transaksi', 'backUrl'));
+
     }
 
     public function show($id)
     {
         $transaksi = Transaksi::with(['details.produk', 'user'])->findOrFail($id);
-        return view('transaksi.show', compact('transaksi'));
+
+        $previousUrl = url()->previous();
+
+        if (str_contains($previousUrl, 'transaksi/create')) {
+            $backUrl = route('transaksi.create'); // kalau datang dari form transaksi baru
+        } elseif (auth()->user()->hak === 'kasir') {
+            $backUrl = route('kasir.riwayat'); // kalau kasir buka dari riwayat
+        } else {
+            $backUrl = route('transaksi.index'); // kalau admin
+        }
+
+        return view('transaksi.show', compact('transaksi', 'backUrl'));
     }
 
-    public function struk($id){
+    public function riwayat()
+    {
+        session()->forget('back_url'); // bersihkan juga
+        $riwayat = Transaksi::where('user_id', auth()->id())
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        return view('transaksi.riwayat', compact('riwayat'));
+    }
+
+    public function cetak($id)
+    {
         $transaksi = Transaksi::with(['details.produk', 'user'])->findOrFail($id);
         return view('transaksi.struk', compact('transaksi'));
     }
