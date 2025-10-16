@@ -8,10 +8,6 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('transaksi.create') }}" class="btn btn-primary mb-3">
-        + Tambah Transaksi
-    </a>
-
     <div class="card">
         <div class="card-body">
             <table class="table table-bordered table-striped">

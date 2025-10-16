@@ -11,9 +11,11 @@ class AdminMiddleware
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->hak === 'admin') {
+        if (Auth::check() && in_array(Auth::user()->hak, ['admin', 'kasir'])) {
             return $next($request);
         }
-            return redirect('/');
+
+        abort(403, 'Akses ditolak. Hanya admin atau kasir yang dapat mengakses halaman ini.');
+
     }
 }

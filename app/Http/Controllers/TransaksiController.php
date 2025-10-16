@@ -13,6 +13,12 @@ class TransaksiController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
+        if($user->hak === 'kasir'){
+            return redirect()->route('transaksi.create');
+        }
+
         session()->forget('back_url'); // bersihkan supaya tidak nyangkut
         $transaksis = Transaksi::with('user')->orderBy('tanggal', 'desc')->paginate(10);
         return view('transaksi.index', compact('transaksis'));

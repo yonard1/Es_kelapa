@@ -11,11 +11,10 @@ class KasirMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->hak === 'kasir') {
+        if (Auth::check() && in_array(Auth::user()->hak, ['admin', 'kasir'])) {
             return $next($request);
         }
 
-        // Kalau bukan kasir, arahkan ke dashboard atau halaman lain
-        return redirect()->route('home')->with('error', 'Akses ditolak. Hanya untuk kasir.');
+        abort(403, 'Akses ditolak. Hanya admin atau kasir yang dapat mengakses halaman ini.');
     }
 }

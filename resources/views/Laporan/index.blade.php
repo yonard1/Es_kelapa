@@ -1,37 +1,36 @@
 @extends('layouts.app')
+
 @section('content')
-
 <div class="container mt-4">
-    <h2 class="mb-3 text-center">Laporan Penjualan & Pembelian</h2>
+    <h3>Laporan ({{ ucfirst($filter) }})</h3>
 
-    {{-- Filter laporan --}}
-    <form action="{{ route('laporan.index') }}" method="GET" class="mb-4 d-flex flex-wrap justify-content-center align-items-end gap-2">
+    <form method="GET" class="mb-3 d-flex align-items-center gap-2">
+        <select name="filter" class="form-select w-auto">
+            <option value="harian" {{ $filter=='harian'?'selected':'' }}>Harian</option>
+            <option value="mingguan" {{ $filter=='mingguan'?'selected':'' }}>Mingguan</option>
+            <option value="bulanan" {{ $filter=='bulanan'?'selected':'' }}>Bulanan</option>
+        </select>
 
-        {{-- Filter tahun --}}
-        <div>
-            <label for="tahun" class="form-label fw-semibold text-secondary">Tahun</label>
-            <select name="tahun" id="tahun" class="form-select" onchange="this.form.submit()">
-                @for ($i = date('Y'); $i >= 2020; $i--)
-                    <option value="{{ $i }}" {{ request('tahun', date('Y')) == $i ? 'selected' : '' }}>{{ $i }}</option>
+        {{-- Filter Bulan (muncul hanya jika filter == bulanan) --}}
+        @if($filter == 'bulanan')
+            <select name="bulan" class="form-select w-auto">
+                @for ($i = 1; $i <= 12; $i++)
+                    <option value="{{ $i }}" {{ $bulan == $i ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}
+                    </option>
                 @endfor
             </select>
-        </div>
 
-        {{-- Filter tanggal mulai --}}
-        <div>
-            <label for="tanggal_mulai" class="form-label fw-semibold text-secondary">Dari</label>
-            <input type="date" id="tanggal_mulai" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}" class="form-control">
-        </div>
+            <select name="tahun" class="form-select w-auto">
+                @for ($y = date('Y'); $y >= date('Y') - 5; $y--)
+                    <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
+                        {{ $y }}
+                    </option>
+                @endfor
+            </select>
+        @endif
 
-        {{-- Filter tanggal selesai --}}
-        <div>
-            <label for="tanggal_selesai" class="form-label fw-semibold text-secondary">Sampai</label>
-            <input type="date" id="tanggal_selesai" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}" class="form-control">
-        </div>
-
-        <div>
-            <button type="submit" class="btn btn-success px-4">🔍 Tampilkan</button>
-        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
     {{-- Tabel Penjualan --}}
@@ -115,5 +114,4 @@
         </div>
     </div>
 </div>
-
 @endsection
