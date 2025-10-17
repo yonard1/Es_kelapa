@@ -26,7 +26,7 @@ class LaporanController extends Controller
         $total_penjualan = 0;
         $total_pembelian = 0;
 
-        // 🔹 Filter berdasarkan jenis laporan
+        // Filter berdasarkan jenis laporan
         if ($filter == 'harian') {
             $transaksis = Transaksi::whereDate('tanggal', $today)->get();
             $pembelians = Pembelian::whereDate('tanggal', $today)->get();
@@ -44,14 +44,14 @@ class LaporanController extends Controller
             $pembelians = Pembelian::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->get();
         }
 
-        // 🔹 Hitung total penjualan & pembelian
+        // Hitung total penjualan & pembelian
         $total_penjualan = $transaksis->sum('total');
         $total_pembelian = $pembelians->sum('total');
 
-        // 🔹 Hitung untung / rugi
+        // Hitung untung / rugi
         $keuntungan = $total_penjualan - $total_pembelian;
 
-        // 🔹 Kirim ke view
+        // Kirim ke view
         return view('laporan.index', compact(
             'filter',
             'bulan',
