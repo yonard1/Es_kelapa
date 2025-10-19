@@ -37,7 +37,7 @@
         <div class="col-md-3 mb-3">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6>Penjualan Hari ini</h6>
+                    <h6>Omzet Hari ini</h6>
                     <h3>Rp{{ number_format($totalPenjualanHariIni, 0, ',', '.') }}</h3>
                 </div>
             </div>
@@ -46,7 +46,7 @@
         <div class="col-md-3 mb-3">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6>Pemb Bulan {{ DateTime::createFromFormat('!m', $bulan)->format('F') }}</h6>
+                    <h6>total Pembelian Bulan {{ DateTime::createFromFormat('!m', $bulan)->format('F') }}</h6>
                     <h3>Rp{{ number_format($totalPembelianBulanIni, 0, ',', '.') }}</h3>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         <div class="col-md-3 mb-3">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6>Penj Bulan {{ DateTime::createFromFormat('!m', $bulan)->format('F') }} {{ $tahun }}</h6>
+                    <h6>Omzet Bulan {{ DateTime::createFromFormat('!m', $bulan)->format('F') }} {{ $tahun }}</h6>
                     <h3>Rp{{ number_format($totalTransaksiBulanIni, 0, ',', '.') }}</h3>
                 </div>
             </div>
