@@ -81,59 +81,5 @@
             </div>
         @endif
     </div>
-
-    {{-- Grafik Line --}}
-    <div class="card mt-4 shadow-sm p-3">
-        <h5 class="text-center mb-3">Grafik Penjualan & Pembelian Tahun {{ $tahun }}</h5>
-        <canvas id="laporanChart" height="400"></canvas>
-    </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('laporanChart').getContext('2d');
-
-    const laporanChart = new Chart(ctx, {
-        type: 'bar', // 🔹 Ganti dari 'line' ke 'bar'
-        data: {
-            labels: @json($bulanNama),
-            datasets: [
-                {
-                    label: 'Penjualan',
-                    data: @json($dataPenjualan),
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Pembelian',
-                    data: @json($dataPembelian),
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 10000, // kamu bisa sesuaikan biar lebih rapi
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top'
-                },
-                title: {
-                    display: true,
-                    text: 'Grafik Penjualan dan Pembelian per Bulan'
-                }
-            }
-        }
-    });
-</script>
 @endsection

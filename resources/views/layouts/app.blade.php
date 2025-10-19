@@ -25,18 +25,22 @@
         overflow-x: hidden;
     }
 
+    /* Struktur dasar */
+    .layout {
+        display: flex;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
     /* SIDEBAR */
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
         width: 230px;
-        height: 100vh;
         background: linear-gradient(180deg, #2E7D32, #388E3C);
         padding: 25px 15px;
         color: white;
         transition: all 0.3s ease;
         z-index: 1030;
+        flex-shrink: 0;
     }
 
     .sidebar h2 {
@@ -121,12 +125,17 @@
         transform: scale(1.05);
     }
 
+    /* MAIN AREA */
+    .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #F8F9FA;
+        overflow-x: hidden;
+    }
+
     /* TOPBAR */
     .topbar {
-        position: fixed;
-        top: 0;
-        left: 230px;
-        right: 0;
         background: #fff;
         border-bottom: 2px solid #e5e5e5;
         height: 60px;
@@ -134,17 +143,18 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 20px;
+        position: sticky;
+        top: 0;
         z-index: 1040;
-        transition: left 0.3s ease;
     }
 
     .topbar h4 {
         color: #2E7D32;
         font-size: 18px;
         font-weight: 600;
-        flex-grow: 1;
         text-align: center;
         margin: 0;
+        flex-grow: 1;
     }
 
     .menu-toggle {
@@ -164,33 +174,15 @@
         color: #fff;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-        .sidebar {
-            left: -250px;
-        }
-        .sidebar.active {
-            left: 0;
-        }
-        .topbar {
-            left: 0;
-        }
-        .menu-toggle {
-            display: block;
-        }
-    }
-
-    /* Content */
+    /* CONTENT */
     .content {
-        margin-left: 230px;
+        flex: 1;
         padding: 25px;
-        transition: margin-left 0.3s ease;
-        margin-top: 50px;
+        overflow-x: auto;
     }
 
-    /* Footer */
+    /* FOOTER */
     footer {
-        margin-left: 230px;
         text-align: center;
         padding: 15px;
         background: #ffffff;
@@ -198,10 +190,31 @@
         color: #555;
     }
 
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            height: 100%;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .menu-toggle {
+            display: block;
+        }
+
+        .content {
+            padding: 20px 15px;
+        }
+    }
     </style>
 </head>
 <body>
-
+<div class="layout">
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <h2>🥥 Es Kelapa</h2>
@@ -268,46 +281,45 @@
         </div>
     </div>
 
-    <!-- Topbar -->
-    <div class="topbar" id="topbar">
-        <button class="menu-toggle" id="menuToggle">☰</button>
-        <h4>Dashboard Penjualan</h4>
-        <div class="user-info">👤 {{ Auth::user()->name }} ({{ Auth::user()->hak }})</div>
+    <!-- Main -->
+    <div class="main">
+        <div class="topbar" id="topbar">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <h4>Penjualan</h4>
+            <div class="user-info">👤 {{ Auth::user()->name }} ({{ Auth::user()->hak }})</div>
+        </div>
+
+        <div class="content">
+            @yield('content')
+        </div>
+
+        <footer>
+            <p class="mb-0">🥥 Aplikasi Penjualan Es Kelapa © {{ date('Y') }}</p>
+        </footer>
     </div>
+</div>
 
-    <!-- Konten -->
-    <div class="content">
-        @yield('content')
-    </div>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script>
+const toggleBtn = document.getElementById('menuToggle');
+const sidebar = document.getElementById('sidebar');
+const groups = document.querySelectorAll('.sidebar-group');
 
-    <!-- Footer -->
-    <footer>
-        <p class="mb-0">🥥 Aplikasi Penjualan Es Kelapa © {{ date('Y') }}</p>
-    </footer>
+// Toggle sidebar di HP
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+});
 
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script>
-    const toggleBtn = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-
-    // Toggle sidebar on mobile
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
-
-    // Sidebar dropdown behavior
-    const groups = document.querySelectorAll('.sidebar-group');
-    groups.forEach(group => {
-        const toggle = group.querySelector('.sidebar-toggle');
-        toggle.addEventListener('click', () => {
-            // Tutup grup lain
-            groups.forEach(g => {
-                if (g !== group) g.classList.remove('open');
-            });
-            // Buka/tutup grup yang diklik
-            group.classList.toggle('open');
+// Dropdown menu di sidebar
+groups.forEach(group => {
+    const toggle = group.querySelector('.sidebar-toggle');
+    toggle.addEventListener('click', () => {
+        groups.forEach(g => {
+            if (g !== group) g.classList.remove('open');
         });
+        group.classList.toggle('open');
     });
-    </script>
+});
+</script>
 </body>
 </html>
