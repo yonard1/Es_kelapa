@@ -248,6 +248,7 @@
                     <a href="{{ route('transaksi.index') }}" class="{{ request()->is('transaksi') || request()->is('transaksi/index') ? 'active' : '' }}">💰 Daftar Transaksi</a>
                     <a href="{{ route('transaksi.create') }}" class="{{ request()->is('transaksi/create') ? 'active' : '' }}">➕ Transaksi Baru</a>
                 @else
+                    <a href="{{ route('pembelian.index') }}" class="{{ request()->is('pembelian*') ? 'active' : '' }}">🛒 Pembelian</a>
                     <a href="{{ route('transaksi.create') }}" class="{{ request()->is('transaksi/create') ? 'active' : '' }}">💰 Transaksi Baru</a>
                     <a href="{{ route('kasir.riwayat') }}" class="{{ request()->is('kasir/riwayat') ? 'active' : '' }}">📜 Riwayat Transaksi</a>
                 @endif
