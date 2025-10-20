@@ -32,7 +32,7 @@
                                 <input type="number" name="bahan[0][jumlah]" class="form-control jumlah" min="1" required>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Harga</label>
+                                <label class="form-label">Harga PerPcs</label>
                                 <input type="number" name="bahan[0][harga]" class="form-control harga" min="0" required>
                             </div>
                             <div class="col-md-3">
