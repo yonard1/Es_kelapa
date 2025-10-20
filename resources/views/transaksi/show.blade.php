@@ -41,7 +41,7 @@
                     <td>{{ $key+1 }}</td>
                     <td>{{ $detail->produk->nama_produk }}</td>
                     <td>Rp {{ number_format($detail->produk->harga, 0, ',', '.') }}</td>
-                    <td>{{ $detail->jumlah }}</td>
+                    <td>{{ $detail->qty }}</td>
                     <td>Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</td>
                 </tr>
             @endforeach

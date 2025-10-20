@@ -58,8 +58,6 @@ class DashboardController extends Controller
             ->groupBy('bulan')
             ->pluck('total', 'bulan')
             ->toArray();
-            
-            $bulanNama = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
             for ($i = 1; $i <= 12; $i++) {
                 $totalPenjualan = Transaksi::whereYear('tanggal', $tahun)
@@ -85,8 +83,7 @@ class DashboardController extends Controller
                 'stokHampirHabis',
                 'keuntungan',
                 'dataPenjualan',
-                'dataPembelian',
-                'bulanNama'
+                'dataPembelian'
             ));
         }
         else {
