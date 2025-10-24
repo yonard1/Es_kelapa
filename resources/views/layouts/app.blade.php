@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Es Kelapa - Dashboard</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+
     <style>
-    @font-face{
-        font-family: Poppins;
+    @font-face {
+        font-family: 'Poppins';
         src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
         font-weight: 400;
     }
 
-    @font-face{
-        font-family: Poppins;
+    @font-face {
+        font-family: 'Poppins';
         src: url('/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
         font-weight: 600;
     }
@@ -25,33 +26,63 @@
         overflow-x: hidden;
     }
 
-    /* Struktur dasar */
     .layout {
         display: flex;
         min-height: 100vh;
         overflow: hidden;
     }
 
-    /* SIDEBAR */
+    /* ===== SIDEBAR ===== */
     .sidebar {
         width: 230px;
         background: linear-gradient(180deg, #2E7D32, #388E3C);
         padding: 25px 15px;
         color: white;
-        transition: all 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
         z-index: 1030;
-        flex-shrink: 0;
+        transform: translateX(0);
+        box-shadow: 3px 0 10px rgba(0, 0, 0, 0.25);
+        transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+        backdrop-filter: blur(3px);
     }
 
-    .sidebar h2 {
-        text-align: center;
-        font-size: 22px;
-        margin-bottom: 25px;
+    .sidebar.hidden {
+        transform: translateX(-250px);
+        box-shadow: none;
+        filter: brightness(0.8);
+    }
+
+    /* === Logo + Judul === */
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .sidebar-header img {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+    }
+
+    .sidebar-header h2 {
+        font-size: 20px;
         font-weight: 600;
+        margin: 0;
+        letter-spacing: 0.5px;
+        line-height: 1;
     }
 
+    /* === Links === */
     .sidebar a {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         padding: 10px 15px;
         color: #fff;
         text-decoration: none;
@@ -60,9 +91,10 @@
         font-weight: 500;
         transition: all 0.3s ease;
     }
+
     .sidebar a:hover,
     .sidebar a.active {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.18);
         transform: translateX(4px);
     }
 
@@ -73,12 +105,18 @@
         width: 100%;
         text-align: left;
         padding: 10px 15px;
-        font-weight: 600;
         cursor: pointer;
         border-radius: 8px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        font-weight: 500;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .sidebar-toggle:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(4px);
     }
 
     .arrow {
@@ -88,14 +126,14 @@
     .sidebar-links {
         display: flex;
         flex-direction: column;
-        margin-left: 5px;
+        margin-left: 10px;
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
     }
 
     .sidebar-group.open .sidebar-links {
-        max-height: 500px;
+        max-height: 400px;
     }
 
     .sidebar-group.open .arrow {
@@ -117,7 +155,11 @@
         font-weight: 600;
         letter-spacing: 0.5px;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
 
     .btn-logout:hover {
@@ -125,16 +167,20 @@
         transform: scale(1.05);
     }
 
-    /* MAIN AREA */
+    /* ===== MAIN ===== */
     .main {
         flex: 1;
         display: flex;
         flex-direction: column;
         background: #F8F9FA;
-        overflow-x: hidden;
+        margin-left: 230px;
+        transition: margin-left 0.4s ease;
     }
 
-    /* TOPBAR */
+    .main.full {
+        margin-left: 0;
+    }
+
     .topbar {
         background: #fff;
         border-bottom: 2px solid #e5e5e5;
@@ -146,19 +192,19 @@
         position: sticky;
         top: 0;
         z-index: 1040;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
     .topbar h4 {
         color: #2E7D32;
         font-size: 18px;
         font-weight: 600;
-        text-align: center;
         margin: 0;
         flex-grow: 1;
+        text-align: center;
     }
 
     .menu-toggle {
-        display: none;
         background: none;
         border: 2px solid #2E7D32;
         color: #2E7D32;
@@ -166,7 +212,7 @@
         border-radius: 6px;
         cursor: pointer;
         padding: 4px 10px;
-        transition: 0.3s;
+        transition: all 0.3s ease;
     }
 
     .menu-toggle:hover {
@@ -174,14 +220,12 @@
         color: #fff;
     }
 
-    /* CONTENT */
     .content {
         flex: 1;
         padding: 25px;
         overflow-x: auto;
     }
 
-    /* FOOTER */
     footer {
         text-align: center;
         padding: 15px;
@@ -190,103 +234,115 @@
         color: #555;
     }
 
-    /* RESPONSIVE */
+    /* ===== OVERLAY (mobile) ===== */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1020;
+        display: none;
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .overlay.active {
+        display: block;
+        opacity: 1;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
         .sidebar {
-            position: fixed;
-            left: -250px;
-            top: 0;
-            height: 100%;
+            transform: translateX(-250px);
         }
-
         .sidebar.active {
-            left: 0;
+            transform: translateX(0);
         }
-
-        .menu-toggle {
-            display: block;
-        }
-
-        .content {
-            padding: 20px 15px;
+        .main {
+            margin-left: 0;
         }
     }
     </style>
 </head>
 <body>
 <div class="layout">
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <h2>🥥 Es Kelapa</h2>
+    <div class="overlay" id="overlay"></div>
 
-        {{-- Dashboard --}}
-        <div class="sidebar-group {{ request()->is('*dashboard*') ? 'open' : '' }}">
-            <button class="sidebar-toggle">Dashboard <span class="arrow">▾</span></button>
-            <div class="sidebar-links">
-                <a href="{{ Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}"
-                class="{{ request()->is('*dashboard*') ? 'active' : '' }}">🏠 Dashboard</a>
-            </div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ asset('icons/coconut.png') }}" alt="Logo">
+            <h2>Es Kelapa</h2>
         </div>
 
-        {{-- Produk & Bahan --}}
+        <a href="{{ Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}" class="{{ request()->is('*dashboard*') ? 'active' : '' }}">
+            <img src="{{ asset('icons/house.png') }}" width="22" alt="Dashboard"> Dashboard
+        </a>
+
         @if(Auth::user()->hak === 'admin')
         <div class="sidebar-group {{ request()->is('product*') || request()->is('material*') ? 'open' : '' }}">
-            <button class="sidebar-toggle">Produk & Bahan <span class="arrow">▾</span></button>
+            <button class="sidebar-toggle">
+                <img src="{{ asset('icons/cooking-pot.png') }}" width="22">Produk & Bahan <span class="arrow">▾</span>
+            </button>
             <div class="sidebar-links">
-                <a href="{{ route('product.index') }}" class="{{ request()->is('product*') ? 'active' : '' }}">🧃 Produk</a>
-                <a href="{{ route('material.index') }}" class="{{ request()->is('material*') ? 'active' : '' }}">🌿 Bahan</a>
+                <a href="{{ route('product.index') }}" class="{{ request()->is('product*') ? 'active' : '' }}">
+                    <img src="{{ asset('icons/cup-soda.png') }}" width="22" alt="Product"> Produk
+                </a>
+                <a href="{{ route('material.index') }}" class="{{ request()->is('material*') ? 'active' : '' }}">
+                    <img src="{{ asset('icons/citrus.png') }}" width="22" alt="Material"> Bahan
+                </a>
             </div>
         </div>
         @endif
 
-        {{-- Transaksi --}}
-        <div class="sidebar-group {{ request()->is('pembelian*') || request()->is('transaksi*') || request()->is('kasir*') ? 'open' : '' }}">
-            <button class="sidebar-toggle">Transaksi <span class="arrow">▾</span></button>
+        <div class="sidebar-group {{ request()->is('pembelian*') || request()->is('transaksi*') ? 'open' : '' }}">
+            <button class="sidebar-toggle">
+                <img src="{{ asset('icons/badge-dollar-sign.png') }}" width="22">Transaksi<span class="arrow">▾</span>
+            </button>
             <div class="sidebar-links">
-                @if(Auth::user()->hak === 'admin')
-                    <a href="{{ route('pembelian.index') }}" class="{{ request()->is('pembelian*') ? 'active' : '' }}">🛒 Pembelian</a>
-                    <a href="{{ route('transaksi.index') }}" class="{{ request()->is('transaksi') || request()->is('transaksi/index') ? 'active' : '' }}">💰 Daftar Transaksi</a>
-                    <a href="{{ route('transaksi.create') }}" class="{{ request()->is('transaksi/create') ? 'active' : '' }}">➕ Transaksi Baru</a>
-                @else
-                    <a href="{{ route('pembelian.index') }}" class="{{ request()->is('pembelian*') ? 'active' : '' }}">🛒 Pembelian</a>
-                    <a href="{{ route('transaksi.create') }}" class="{{ request()->is('transaksi/create') ? 'active' : '' }}">💰 Transaksi Baru</a>
-                    <a href="{{ route('kasir.riwayat') }}" class="{{ request()->is('kasir/riwayat') ? 'active' : '' }}">📜 Riwayat Transaksi</a>
-                @endif
+                <a href="{{ route('pembelian.index') }}">
+                    <img src="{{ asset('icons/shopping-cart.png') }}" width="22"> Pembelian
+                </a>
+                <a href="{{ route('transaksi.create') }}">
+                    <img src="{{ asset('icons/shopping-basket.png') }}" width="22"> Transaksi Baru
+                </a>
+                <a href="{{ route('transaksi.index') }}">
+                    <img src="{{ asset('icons/file-clock.png') }}" width="22"> Daftar Transaksi
+                </a>
             </div>
         </div>
 
-        {{-- Laporan --}}
-        @if(Auth::user()->hak === 'admin')
-        <div class="sidebar-group {{ request()->is('laporan*') ? 'open' : '' }}">
-            <button class="sidebar-toggle">Laporan <span class="arrow">▾</span></button>
-            <div class="sidebar-links">
-                <a href="{{ route('laporan.index') }}" class="{{ request()->is('laporan*') ? 'active' : '' }}">📑 Penjualan & Pembelian</a>
-            </div>
-        </div>
+        <a href="{{ route('laporan.index') }}">
+            <img src="{{ asset('icons/file-text.png') }}" width="22"> Laporan
+        </a>
 
-        {{-- Admin --}}
-        <div class="sidebar-group {{ request()->is('users*') ? 'open' : '' }}">
-            <button class="sidebar-toggle">Admin <span class="arrow">▾</span></button>
-            <div class="sidebar-links">
-                <a href="{{ route('users.index') }}" class="{{ request()->is('users*') ? 'active' : '' }}">👥 Pengguna</a>
-            </div>
-        </div>
-        @endif
+        <a href="{{ route('users.index') }}">
+            <img src="{{ asset('icons/users.png') }}" width="22"> Admin
+        </a>
 
-        {{-- Logout --}}
         <div class="sidebar-footer mt-auto p-3 text-center">
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-logout">🔒 Logout</button>
+                <button type="submit" class="btn-logout">
+                    <img src="{{ asset('icons/log-out.png') }}" width="22"> Logout
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Main -->
-    <div class="main">
-        <div class="topbar" id="topbar">
+    <div class="main" id="main">
+        <div class="topbar">
             <button class="menu-toggle" id="menuToggle">☰</button>
-            <h4>Penjualan</h4>
+            <h4>Dashboard Penjualan</h4>
             <div class="user-info">👤 {{ Auth::user()->name }} ({{ Auth::user()->hak }})</div>
         </div>
 
@@ -302,23 +358,39 @@
 
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
-const toggleBtn = document.getElementById('menuToggle');
-const sidebar = document.getElementById('sidebar');
-const groups = document.querySelectorAll('.sidebar-group');
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('menuToggle');
+    const overlay = document.getElementById('overlay');
+    const main = document.getElementById('main');
+    const groups = document.querySelectorAll('.sidebar-group');
 
-// Toggle sidebar di HP
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-});
+    // Toggle sidebar (desktop & mobile)
+    toggleBtn.addEventListener('click', () => {
+        if (window.innerWidth > 768) {
+            sidebar.classList.toggle('hidden');
+            main.classList.toggle('full');
+        } else {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    });
 
-// Dropdown menu di sidebar
-groups.forEach(group => {
-    const toggle = group.querySelector('.sidebar-toggle');
-    toggle.addEventListener('click', () => {
-        groups.forEach(g => {
-            if (g !== group) g.classList.remove('open');
+    // Tutup sidebar kalau klik overlay (mobile)
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // Dropdown menu di sidebar
+    groups.forEach(group => {
+        const toggle = group.querySelector('.sidebar-toggle');
+        toggle.addEventListener('click', () => {
+            groups.forEach(g => {
+                if (g !== group) g.classList.remove('open');
+            });
+            group.classList.toggle('open');
         });
-        group.classList.toggle('open');
     });
 });
 </script>
