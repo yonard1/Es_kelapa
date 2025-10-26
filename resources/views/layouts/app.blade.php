@@ -12,7 +12,6 @@
         src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
         font-weight: 400;
     }
-
     @font-face {
         font-family: 'Poppins';
         src: url('/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
@@ -21,7 +20,7 @@
 
     body {
         font-family: 'Poppins', sans-serif;
-        background: #F8F9FA;
+        background: radial-gradient(circle at top left, #f1f8e9, #c8e6c9);
         margin: 0;
         overflow-x: hidden;
     }
@@ -32,72 +31,71 @@
         overflow: hidden;
     }
 
-    /* ===== SIDEBAR ===== */
+    /* === SIDEBAR === */
     .sidebar {
-        width: 230px;
-        background: linear-gradient(180deg, #2E7D32, #388E3C);
-        padding: 25px 15px;
-        color: white;
+        width: 240px;
+        background: rgba(46,125,50,0.85);
+        backdrop-filter: blur(12px);
+        border-right: 1px solid rgba(255,255,255,0.1);
+        color: #fff;
         position: fixed;
         top: 0;
         left: 0;
         bottom: 0;
         z-index: 1030;
-        transform: translateX(0);
-        box-shadow: 3px 0 10px rgba(0, 0, 0, 0.25);
-        transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
-        backdrop-filter: blur(3px);
+        box-shadow: 4px 0 25px rgba(0,0,0,0.2);
+        transition: transform 0.45s ease-in-out, width 0.4s ease, backdrop-filter 0.3s ease;
     }
-
     .sidebar.hidden {
         transform: translateX(-250px);
-        box-shadow: none;
         filter: brightness(0.8);
     }
 
-    /* === Logo + Judul === */
+    /* === Header === */
     .sidebar-header {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
         gap: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 35px;
+        padding: 0 15px;
     }
-
     .sidebar-header img {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
         object-fit: contain;
+        box-shadow: 0 0 12px rgba(255,255,255,0.3);
     }
-
     .sidebar-header h2 {
         font-size: 20px;
         font-weight: 600;
         margin: 0;
-        letter-spacing: 0.5px;
-        line-height: 1;
     }
 
-    /* === Links === */
+    /* === Link Style === */
     .sidebar a {
         display: flex;
         align-items: center;
         gap: 10px;
         padding: 10px 15px;
-        color: #fff;
+        color: #f5f5f5;
         text-decoration: none;
-        border-radius: 8px;
-        margin: 2px 0;
+        border-radius: 10px;
         font-weight: 500;
-        transition: all 0.3s ease;
+        margin: 3px 0;
+        transition: all 0.35s ease;
+        position: relative;
     }
-
-    .sidebar a:hover,
+    .sidebar a:hover {
+        background: rgba(255,255,255,0.15);
+        transform: translateX(5px);
+    }
     .sidebar a.active {
-        background: rgba(255, 255, 255, 0.18);
-        transform: translateX(4px);
+        background: rgba(255,255,255,0.25);
+        box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
     }
 
+    /* === Dropdown === */
     .sidebar-toggle {
         background: none;
         border: none;
@@ -106,84 +104,83 @@
         text-align: left;
         padding: 10px 15px;
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-weight: 500;
-        transition: background 0.3s ease, transform 0.3s ease;
+        transition: 0.3s;
     }
-
     .sidebar-toggle:hover {
-        background: rgba(255, 255, 255, 0.15);
-        transform: translateX(4px);
+        background: rgba(255,255,255,0.15);
+        transform: translateX(5px);
     }
 
     .arrow {
-        transition: transform 0.3s ease;
+        transition: transform 0.4s ease;
     }
 
     .sidebar-links {
         display: flex;
         flex-direction: column;
-        margin-left: 10px;
+        margin-left: 20px;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        opacity: 0;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
     }
 
     .sidebar-group.open .sidebar-links {
         max-height: 400px;
+        opacity: 1;
     }
-
     .sidebar-group.open .arrow {
-        transform: rotate(-90deg);
+        transform: rotate(-180deg);
     }
 
+    /* === Logout === */
     .sidebar-footer {
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        padding-top: 15px;
+        border-top: 1px solid rgba(255,255,255,0.2);
+        padding-top: 20px;
+        margin-top: auto;
     }
-
     .btn-logout {
         width: 100%;
-        background: linear-gradient(135deg, #2ecc71, #27ae60);
-        color: white;
+        background: linear-gradient(135deg, #43a047, #2e7d32);
         border: none;
+        color: #fff;
         border-radius: 25px;
         padding: 10px 0;
         font-weight: 600;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
         gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-
     .btn-logout:hover {
-        background: linear-gradient(135deg, #27ae60, #1e8449);
         transform: scale(1.05);
+        background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.35);
     }
 
-    /* ===== MAIN ===== */
+    /* === MAIN === */
     .main {
         flex: 1;
         display: flex;
         flex-direction: column;
         background: #F8F9FA;
-        margin-left: 230px;
+        margin-left: 240px;
         transition: margin-left 0.4s ease;
     }
-
     .main.full {
         margin-left: 0;
     }
 
     .topbar {
-        background: #fff;
-        border-bottom: 2px solid #e5e5e5;
+        background: rgba(255,255,255,0.9);
+        border-bottom: 2px solid #e0e0e0;
         height: 60px;
         display: flex;
         align-items: center;
@@ -192,7 +189,8 @@
         position: sticky;
         top: 0;
         z-index: 1040;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        backdrop-filter: blur(5px);
     }
 
     .topbar h4 {
@@ -212,9 +210,8 @@
         border-radius: 6px;
         cursor: pointer;
         padding: 4px 10px;
-        transition: all 0.3s ease;
+        transition: 0.3s;
     }
-
     .menu-toggle:hover {
         background: #2E7D32;
         color: #fff;
@@ -234,33 +231,24 @@
         color: #555;
     }
 
-    /* ===== OVERLAY (mobile) ===== */
+    /* Overlay (mobile) */
     .overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.4);
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4);
         z-index: 1020;
         display: none;
-        backdrop-filter: blur(3px);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        backdrop-filter: blur(3px);
+        transition: opacity 0.4s ease;
     }
-
     .overlay.active {
         display: block;
         opacity: 1;
-        animation: fadeIn 0.3s ease;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    /* ===== RESPONSIVE ===== */
+    /* RESPONSIVE */
     @media (max-width: 768px) {
         .sidebar {
             transform: translateX(-250px);
@@ -273,9 +261,9 @@
         }
     }
     </style>
-</head>
-<body>
-<div class="layout">
+    </head>
+    <body>
+    <div class="layout">
     <div class="overlay" id="overlay"></div>
 
     <div class="sidebar" id="sidebar">
@@ -285,7 +273,7 @@
         </div>
 
         <a href="{{ Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}" class="{{ request()->is('*dashboard*') ? 'active' : '' }}">
-            <img src="{{ asset('icons/house.png') }}" width="22" alt="Dashboard"> Dashboard
+            <img src="{{ asset('icons/house.png') }}" width="22"> Dashboard
         </a>
 
         @if(Auth::user()->hak === 'admin')
@@ -295,10 +283,13 @@
             </button>
             <div class="sidebar-links">
                 <a href="{{ route('product.index') }}" class="{{ request()->is('product*') ? 'active' : '' }}">
-                    <img src="{{ asset('icons/cup-soda.png') }}" width="22" alt="Product"> Produk
+                    <img src="{{ asset('icons/cup-soda.png') }}" width="22"> Produk
                 </a>
                 <a href="{{ route('material.index') }}" class="{{ request()->is('material*') ? 'active' : '' }}">
-                    <img src="{{ asset('icons/citrus.png') }}" width="22" alt="Material"> Bahan
+                    <img src="{{ asset('icons/citrus.png') }}" width="22"> Bahan
+                </a>
+                <a href="{{ route('produksi.index') }}" class="{{ request()->is('produksi*') ? 'active' : '' }}">
+                    <img src="{{ asset('icons/package.png') }}" width="22"> Produksi
                 </a>
             </div>
         </div>
@@ -321,17 +312,13 @@
             </div>
         </div>
 
-        <a href="{{ route('laporan.index') }}">
-            <img src="{{ asset('icons/file-text.png') }}" width="22"> Laporan
-        </a>
+        @if(Auth::user()->hak === 'admin')
+        <a href="{{ route('laporan.index') }}"><img src="{{ asset('icons/file-text.png') }}" width="22"> Laporan</a>
+        <a href="{{ route('users.index') }}"><img src="{{ asset('icons/users.png') }}" width="22"> Admin</a>
+        @endif
 
-        <a href="{{ route('users.index') }}">
-            <img src="{{ asset('icons/users.png') }}" width="22"> Admin
-        </a>
-
-        <div class="sidebar-footer mt-auto p-3 text-center">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
+        <div class="sidebar-footer text-center p-3">
+            <form action="{{ route('logout') }}" method="POST">@csrf
                 <button type="submit" class="btn-logout">
                     <img src="{{ asset('icons/log-out.png') }}" width="22"> Logout
                 </button>
@@ -346,26 +333,20 @@
             <div class="user-info">👤 {{ Auth::user()->name }} ({{ Auth::user()->hak }})</div>
         </div>
 
-        <div class="content">
-            @yield('content')
-        </div>
-
-        <footer>
-            <p class="mb-0">🥥 Aplikasi Penjualan Es Kelapa © {{ date('Y') }}</p>
-        </footer>
+        <div class="content">@yield('content')</div>
+        <footer><p class="mb-0">🥥 Aplikasi Penjualan Es Kelapa © {{ date('Y') }}</p></footer>
     </div>
 </div>
 
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('menuToggle');
     const overlay = document.getElementById('overlay');
     const main = document.getElementById('main');
     const groups = document.querySelectorAll('.sidebar-group');
 
-    // Toggle sidebar (desktop & mobile)
     toggleBtn.addEventListener('click', () => {
         if (window.innerWidth > 768) {
             sidebar.classList.toggle('hidden');
@@ -376,19 +357,15 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Tutup sidebar kalau klik overlay (mobile)
     overlay.addEventListener('click', () => {
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
     });
 
-    // Dropdown menu di sidebar
     groups.forEach(group => {
         const toggle = group.querySelector('.sidebar-toggle');
         toggle.addEventListener('click', () => {
-            groups.forEach(g => {
-                if (g !== group) g.classList.remove('open');
-            });
+            groups.forEach(g => { if (g !== group) g.classList.remove('open'); });
             group.classList.toggle('open');
         });
     });

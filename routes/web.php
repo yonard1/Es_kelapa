@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     PembelianController,
     TransaksiController,
     DashboardController,
-    LaporanController
+    LaporanController,
+    ProduksiController
 };
 
 // ===================== HALAMAN UMUM =====================
@@ -62,6 +63,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // 🔹 Laporan & User
     Route::resource('users', UserController::class);
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+
+    Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
+    Route::post('/produksi', [ProduksiController::class, 'store'])->name('produksi.store');
+    Route::delete('/produksi/{id}', [ProduksiController::class, 'destroy'])->name('produksi.destroy');
 });
 
 // ==================
