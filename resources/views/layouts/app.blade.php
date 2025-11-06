@@ -313,8 +313,8 @@
         </div>
 
         @if(Auth::user()->hak === 'admin')
-        <a href="{{ route('laporan.index') }}"><img src="{{ asset('icons/file-text.png') }}" width="22"> Laporan</a>
-        <a href="{{ route('users.index') }}"><img src="{{ asset('icons/users.png') }}" width="22"> Admin</a>
+            <a href="{{ route('laporan.index') }}"><img src="{{ asset('icons/file-text.png') }}" width="22"> Laporan</a>
+            <a href="{{ route('users.index') }}"><img src="{{ asset('icons/users.png') }}" width="22"> Admin</a>
         @endif
 
         <div class="sidebar-footer text-center p-3">
