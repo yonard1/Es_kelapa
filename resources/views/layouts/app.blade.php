@@ -8,7 +8,7 @@
     <!-- Bootstrap -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
-    <!-- Favicon dengan ukuran besar -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('logo/SR.png') }}">
     <link rel="apple-touch-icon" sizes="512x512" href="{{ asset('logo/SR.png') }}">
 
@@ -62,27 +62,27 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        gap: 12px;
+        gap: 14px;
         margin-bottom: 35px;
         padding: 15px 18px;
         border-bottom: 1px solid rgba(255,255,255,0.15);
     }
 
     .sidebar-header img {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        object-fit: contain;
+        width: 68px;
+        height: 68px;
+        border-radius: 15px;
+        object-fit: cover;
         object-position: center;
-        background: #fff;
-        padding: 6px;
-        box-shadow: 0 0 18px rgba(255,255,255,0.4);
+        background: none;
+        padding: 0;
+        box-shadow: 0 0 15px rgba(255,255,255,0.4);
         transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
     .sidebar-header:hover img {
         transform: scale(1.08);
-        box-shadow: 0 0 22px rgba(255,255,255,0.6);
+        box-shadow: 0 0 20px rgba(255,255,255,0.7);
     }
 
     .sidebar-header h2 {
@@ -289,7 +289,7 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="{{ asset('logo/SR.png') }}" alt="Logo Es Kelapa">
+            <img src="{{ asset('logo/SR_2.png') }}" alt="Logo Es Kelapa">
             <h2>Es Kelapa</h2>
         </div>
 
