@@ -11,7 +11,7 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-logo">
-            <img src="{{ asset('images/logo.png') }}" alt="Es Kelapa Logo">
+            <img src="{{ asset('logo/SR.png') }}" alt="Es Kelapa Logo">
         </div>
         <h2 class="auth-title">Login</h2>
 

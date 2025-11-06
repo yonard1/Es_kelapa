@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Es Kelapa - Dashboard</title>
+
+    <!-- Bootstrap -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Favicon dengan ukuran besar -->
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('logo/SR.png') }}">
+    <link rel="apple-touch-icon" sizes="512x512" href="{{ asset('logo/SR.png') }}">
 
     <style>
     @font-face {
@@ -51,24 +57,39 @@
         filter: brightness(0.8);
     }
 
-    /* === Header === */
+    /* === Header (Logo + Judul) === */
     .sidebar-header {
         display: flex;
         align-items: center;
-        gap: 10px;
+        justify-content: flex-start;
+        gap: 12px;
         margin-bottom: 35px;
-        padding: 0 15px;
+        padding: 15px 18px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
     }
+
     .sidebar-header img {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
         object-fit: contain;
-        box-shadow: 0 0 12px rgba(255,255,255,0.3);
+        object-position: center;
+        background: #fff;
+        padding: 6px;
+        box-shadow: 0 0 18px rgba(255,255,255,0.4);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
+
+    .sidebar-header:hover img {
+        transform: scale(1.08);
+        box-shadow: 0 0 22px rgba(255,255,255,0.6);
+    }
+
     .sidebar-header h2 {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         margin: 0;
     }
 
@@ -261,14 +282,14 @@
         }
     }
     </style>
-    </head>
-    <body>
-    <div class="layout">
+</head>
+<body>
+<div class="layout">
     <div class="overlay" id="overlay"></div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="{{ asset('icons/coconut.png') }}" alt="Logo">
+            <img src="{{ asset('logo/SR.png') }}" alt="Logo Es Kelapa">
             <h2>Es Kelapa</h2>
         </div>
 
