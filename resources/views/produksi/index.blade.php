@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="fw-bold">📦 Data Produksi</h3>
+        <h3 class="fw-bold">Data Produksi</h3>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahProduksi">
             + Tambah Produksi
         </button>
@@ -60,10 +60,10 @@
                     @endif
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center">
+                {{ $produksi->links('pagination::bootstrap-5') }}
+            </div>
         </div>
-    </div>
-    <div class="d-flex justify-content-center">
-        {{ $produksi->links() }}
     </div>
 </div>
 

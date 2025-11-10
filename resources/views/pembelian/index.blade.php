@@ -39,5 +39,8 @@
     @foreach($pembelians as $pembelian)
         @include('pembelian.modal_detail', ['pembelian' => $pembelian])
     @endforeach
+    <div class="d-flex justify-content-center">
+        {{ $pembelians->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 @endsection

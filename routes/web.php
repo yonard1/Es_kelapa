@@ -30,11 +30,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ==================
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard/material-stok', [DashboardController::class, 'getMaterialStok'])->name('get.material.stok');
+    Route::get('/get-top-products', [DashboardController::class, 'getTopProducts'])->name('get.top.products');
     Route::get('/kasir/dashboard', [DashboardController::class, 'index'])->name('kasir.dashboard');
 });
 
 // ==================
-// Modul Umum (Bisa dipakai dua-duanya)
+// Modul Umum
 // ==================
 Route::middleware(['auth'])->group(function () {
     Route::resource('product', ProductController::class);
@@ -63,6 +65,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // 🔹 Laporan & User
     Route::resource('users', UserController::class);
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/download', [LaporanController::class, 'downloadPdf'])->name('laporan.download');
 
     Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
     Route::post('/produksi', [ProduksiController::class, 'store'])->name('produksi.store');

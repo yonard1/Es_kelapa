@@ -12,7 +12,7 @@ class PembelianController extends Controller
 {
     public function index()
     {
-        $pembelians = Pembelian::with(['user', 'details.bahan'])->latest()->get();
+        $pembelians = Pembelian::with(['user', 'details.bahan'])->latest()->paginate(10);
         $materials = Material::all();
         return view('pembelian.index', compact('pembelians', 'materials'));
     }

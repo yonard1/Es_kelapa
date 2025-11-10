@@ -26,7 +26,11 @@
           </div>
           <div class="mb-3">
             <label>Foto</label>
-            <input type="file" name="foto" class="form-control">
+              <input type="file" name="foto" id="fotoinput" class="form-control">
+              <!-- Tempat menampilkan preview -->
+              <div class="mt-2 text-center">
+                  <img id="previewImage" src="#" alt="Preview Gambar" style="display:none; max-width: 150px; border: 1px solid #ccc; border-radius: 5px; padding: 5px;">
+              </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -37,3 +41,28 @@
     </div>
   </div>
 </div>
+
+<!-- Script preview gambar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const input = document.getElementById('fotoinput');
+      const preview = document.getElementById('previewImage');
+
+      input.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+              const reader = new FileReader();
+
+              reader.onload = function(e) {
+                  preview.src = e.target.result;
+                  preview.style.display = 'block';
+              }
+
+              reader.readAsDataURL(file);
+          } else {
+              preview.src = '#';
+              preview.style.display = 'none';
+          }
+      });
+  });
+</script>

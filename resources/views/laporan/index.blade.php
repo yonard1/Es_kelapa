@@ -1,3 +1,5 @@
+<!-- resources/views/laporan/index.blade.php -->
+
 @extends('layouts.app')
 
 @section('content')
@@ -6,12 +8,12 @@
 
     <form method="GET" class="mb-3 d-flex align-items-center gap-2">
         <select name="filter" class="form-select w-auto">
-            <option value="harian" {{ $filter=='harian'?'selected':'' }}>Harian</option>
-            <option value="mingguan" {{ $filter=='mingguan'?'selected':'' }}>Mingguan</option>
-            <option value="bulanan" {{ $filter=='bulanan'?'selected':'' }}>Bulanan</option>
+            <option value="harian" {{ $filter == 'harian' ? 'selected' : '' }}>Harian</option>
+            <option value="mingguan" {{ $filter == 'mingguan' ? 'selected' : '' }}>Mingguan</option>
+            <option value="bulanan" {{ $filter == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
         </select>
 
-        {{-- Filter Bulan (muncul hanya jika filter == bulanan) --}}
+        {{-- Filter Bulan dan Tahun untuk laporan bulanan --}}
         @if($filter == 'bulanan')
             <select name="bulan" class="form-select w-auto">
                 @for ($i = 1; $i <= 12; $i++)
@@ -33,7 +35,11 @@
         <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
-    {{-- Tabel Penjualan --}}
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ route('laporan.download', ['filter' => $filter, 'bulan' => $bulan, 'tahun' => $tahun]) }}" class="btn btn-danger">Download PDF</a>
+    </div>
+
+    {{-- Data Penjualan --}}
     <div class="card mb-4">
         <div class="card-header bg-success text-white">
             <h5 class="mb-0">Data Penjualan</h5>
@@ -64,7 +70,7 @@
         </div>
     </div>
 
-    {{-- Tabel Pembelian --}}
+    {{-- Data Pembelian --}}
     <div class="card mb-4">
         <div class="card-header bg-warning text-white">
             <h5 class="mb-0">Data Pembelian</h5>
@@ -77,7 +83,7 @@
                     <thead class="table-warning">
                         <tr>
                             <th>Tanggal</th>
-                            <th>Petugas</th>
+                            <th>Pemasok</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -85,7 +91,7 @@
                         @foreach($pembelians as $p)
                             <tr>
                                 <td>{{ $p->tanggal }}</td>
-                                <td>{{ $p->user->name ?? 'Tidak diketahui' }}</td>
+                                <td>{{ $p->supplier->name ?? 'Tidak diketahui' }}</td>
                                 <td>Rp {{ number_format($p->total, 0, ',', '.') }}</td>
                             </tr>
                         @endforeach
@@ -95,23 +101,11 @@
         </div>
     </div>
 
-    {{-- Ringkasan --}}
-    <div class="card">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">Ringkasan Laporan</h5>
-        </div>
-        <div class="card-body text-center">
-            <p><strong>Total Penjualan:</strong> Rp {{ number_format($total_penjualan, 0, ',', '.') }}</p>
-            <p><strong>Total Pembelian:</strong> Rp {{ number_format($total_pembelian, 0, ',', '.') }}</p>
-
-            @if($keuntungan > 0)
-                <p class="text-success"><strong>Keuntungan:</strong> Rp {{ number_format($keuntungan, 0, ',', '.') }}</p>
-            @elseif($keuntungan < 0)
-                <p class="text-danger"><strong>Kerugian:</strong> Rp {{ number_format(abs($keuntungan), 0, ',', '.') }}</p>
-            @else
-                <p><strong>Seimbang:</strong> Tidak ada untung/rugi</p>
-            @endif
-        </div>
+    {{-- Total & Keuntungan --}}
+    <div class="alert alert-info">
+        <h5>Total Penjualan: Rp {{ number_format($total_penjualan, 0, ',', '.') }}</h5>
+        <h5>Total Pembelian: Rp {{ number_format($total_pembelian, 0, ',', '.') }}</h5>
+        <h5>Keuntungan: Rp {{ number_format($keuntungan, 0, ',', '.') }}</h5>
     </div>
 </div>
 @endsection

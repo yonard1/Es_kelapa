@@ -45,6 +45,9 @@
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        {{ $materials->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 
 {{-- Modal Create --}}

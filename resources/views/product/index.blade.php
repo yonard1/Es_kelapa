@@ -46,6 +46,9 @@
         @include('product.modal_edit', ['products' => $p])
         @endforeach
     </table>
+    <div class="d-flex justify-content-center">
+        {{ $products->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 
 <!-- Include Modal Create -->

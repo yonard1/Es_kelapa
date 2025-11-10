@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use App\Models\Product;
 use App\Models\Transaksi;
 use App\Models\DetailTransaksi;
@@ -119,6 +120,11 @@ class TransaksiController extends Controller
     public function cetak($id)
     {
         $transaksi = Transaksi::with(['details.produk', 'user'])->findOrFail($id);
-        return view('transaksi.struk', compact('transaksi'));
+
+    // Generate PDF from the view
+    $pdf = PDF::loadView('transaksi.struk', compact('transaksi'));
+
+    // Return the PDF to download
+    return $pdf->download('struk-transaksi-'.$transaksi->id_transaksi.'.pdf');
     }
 }
