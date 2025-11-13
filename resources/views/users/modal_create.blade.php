@@ -21,6 +21,10 @@
                         <input type="password" name="password" class="form-control" required>
                     </div>
                     <div class="mb-3">
+                        <label>Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="hak">Hak</label>
                         <select class="form-control" name="hak" id="hak" required>
                             <option value="">-- Pilih Hak --</option>

@@ -12,18 +12,40 @@ use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+        $date = $request->input('date');
+
+        // Ambil data transaksi dengan relasi user
+        $query = Transaksi::with('user')->orderBy('tanggal', 'desc');
+
+        // 🔍 Filter berdasarkan nama kasir
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // 📅 Filter berdasarkan tanggal
+        if ($date) {
+            $query->whereDate('tanggal', $date);
+        }
+
         $user = Auth::user();
 
-        if($user->hak === 'kasir'){
+        // Kalau user adalah kasir, arahkan ke halaman tambah transaksi
+        if ($user->hak === 'kasir') {
             return redirect()->route('transaksi.create');
         }
 
-        session()->forget('back_url'); // bersihkan supaya tidak nyangkut
-        $transaksis = Transaksi::with('user')->orderBy('tanggal', 'desc')->paginate(10);
-        return view('transaksi.index', compact('transaksis'));
+        session()->forget('back_url'); // Bersihkan session
+
+        $transaksis = $query->paginate(10);
+
+        return view('transaksi.index', compact('transaksis', 'search', 'date'));
     }
+
 
     // Form create transaksi
     public function create()

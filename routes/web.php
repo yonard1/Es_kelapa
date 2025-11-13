@@ -13,76 +13,64 @@ use App\Http\Controllers\{
     ProduksiController
 };
 
-// ===================== HALAMAN UMUM =====================
+// =====================
+// HALAMAN UMUM
+// =====================
 Route::get('/', fn() => view('welcome'))->name('home');
 
-// ==================
-// Auth (Login & Register)
-// ==================
+// =====================
+// AUTH (Login & Register)
+// =====================
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// ==================
-// Dashboard (Admin & Kasir)
-// ==================
+// =====================
+// DASHBOARD
+// =====================
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/kasir/dashboard', [DashboardController::class, 'index'])->name('kasir.dashboard');
     Route::get('/dashboard/material-stok', [DashboardController::class, 'getMaterialStok'])->name('get.material.stok');
     Route::get('/get-top-products', [DashboardController::class, 'getTopProducts'])->name('get.top.products');
-    Route::get('/kasir/dashboard', [DashboardController::class, 'index'])->name('kasir.dashboard');
 });
 
-// ==================
-// Modul Umum
-// ==================
-Route::middleware(['auth'])->group(function () {
+// =====================
+// ADMIN ONLY
+// =====================
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    // Produk, Material, Pembelian
     Route::resource('product', ProductController::class);
     Route::resource('material', MaterialController::class);
     Route::resource('pembelian', PembelianController::class);
+
+    // Transaksi
     Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
     Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
     Route::get('/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('transaksi.cetak');
-});
 
-// ==================
-// Admin Only
-// ==================
-Route::middleware(['auth', 'admin'])->group(function () {
-    // 🔹 Daftar Transaksi (khusus admin)
-    Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
-    Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
-    Route::get('/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('transaksi.cetak');
-
-    // 🔹 Tambah Transaksi
-    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
-    Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
-
-    // 🔹 Laporan & User
-    Route::resource('users', UserController::class);
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-    Route::get('/laporan/download', [LaporanController::class, 'downloadPdf'])->name('laporan.download');
-
+    // Produksi
     Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
     Route::post('/produksi', [ProduksiController::class, 'store'])->name('produksi.store');
     Route::delete('/produksi/{id}', [ProduksiController::class, 'destroy'])->name('produksi.destroy');
+
+    // User & Laporan
+    Route::resource('users', UserController::class);
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/download', [LaporanController::class, 'downloadPdf'])->name('laporan.download');
 });
 
-// ==================
-// Kasir Only
-// ==================
-Route::middleware(['auth', 'kasir'])->group(function () {
-    // 🔹 Transaksi baru
-    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
-    Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
-
-    // 🔹 Riwayat transaksi kasir
+// =====================
+// KASIR ONLY
+// =====================
+Route::middleware(['auth', 'role:kasir'])->group(function () {
+    Route::get('/kasir/transaksi-baru', [TransaksiController::class, 'create'])->name('kasir.transaksi.create');
+    Route::post('/kasir/transaksi-baru', [TransaksiController::class, 'store'])->name('kasir.transaksi.store');
     Route::get('/kasir/riwayat', [TransaksiController::class, 'riwayat'])->name('kasir.riwayat');
-
-    // 🔹 Cetak struk (hanya jika transaksi milik dia)
-    Route::get('/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('transaksi.cetak');
+    Route::get('/kasir/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('kasir.transaksi.cetak');
 });

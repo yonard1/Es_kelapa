@@ -17,7 +17,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
-            'password' => 'required|min:5',
+            'password' => 'required|min:5|confirmed',
             'hak' => 'required|in:admin,kasir',
         ]);
 
@@ -31,17 +31,24 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User berhasil ditambahkan');
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $user = User::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username,' . $user->id,
             'hak' => 'required|in:admin,kasir',
+            'password' => 'nullable|min:5|confirmed', // ✅ tambahkan rule confirmed
         ]);
 
         $data = $request->only(['name', 'username', 'hak']);
-        if($request->password){
+
+        if ($request->filled('password')) {
+            if (Hash::check($request->password, $user->password)) {
+                return back()->withErrors(['password' => 'Password baru tidak boleh sama dengan password lama.']);
+            }
+
             $data['password'] = Hash::make($request->password);
         }
 

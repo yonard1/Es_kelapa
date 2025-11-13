@@ -4,19 +4,16 @@
 <div class="container">
     <h3 class="mb-4">Tambah Transaksi</h3>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $err)
-                    <li>{{ $err }}</li>
-                @endforeach
-            </ul>
+    @if (session('error'))
+        <div class="alert alert-danger mt-2">
+            {{ session('error') }}
         </div>
     @endif
 
+
     <form action="{{ route('transaksi.store') }}" method="POST">
         @csrf
-
+        
         <div class="mb-3">
             <label for="tanggal" class="form-label">Tanggal</label>
             <input type="date" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}" required>
@@ -78,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const totalInput = document.getElementById('total');
     const bayarInput = document.getElementById('bayar');
     const kembalianInput = document.getElementById('kembalian');
+    const form = document.querySelector('form');
 
     // Tombol tambah produk
     document.getElementById('addRow').addEventListener('click', function() {
@@ -117,6 +115,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hitung kembalian saat input uang bayar berubah
     bayarInput.addEventListener('input', hitungKembalian);
+
+    // === VALIDASI SUBMIT ===
+    form.addEventListener('submit', function(event) {
+        const total = parseFloat(totalInput.value || 0);
+        const bayar = parseFloat(bayarInput.value || 0);
+
+        if (bayar < total) {
+            event.preventDefault();
+            alert('⚠️ Uang yang dibayarkan kurang dari total yang harus dibayar!');
+        }
+    });
 
     // === Fungsi bantu ===
     function validateDuplicateProduct() {

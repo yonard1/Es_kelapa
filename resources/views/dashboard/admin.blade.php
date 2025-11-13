@@ -164,7 +164,7 @@
         <div class="col-md-4 col-sm-6">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body text-center">
-                    @if ($product->produk)
+                    @if ($product->produk )
                         <h5 class="fw-bold">{{ $product->produk->nama_produk }}</h5>
                     @else
                         <p class="text-muted">Produk tidak ditemukan</p>
@@ -176,20 +176,6 @@
         @endforeach
     </div>
 
-    {{-- 🧱 Material Terbaru --}}
-    <h5 class="fw-bold mt-5 mb-3 section-title">📦 Bahan Baku</h5>
-    <div class="row g-3 material-list">
-        @foreach ($material as $mat)
-        <div class="col-md-4 col-sm-6">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body text-center">
-                    <h5 class="fw-bold">{{ $mat->nama_bahan }}</h5>
-                    <p class="text-secondary mb-0">Stok: <strong>{{ $mat->stok }}</strong> {{ $mat->satuan }}</p>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
 </div>
 
 {{-- Chart.js --}}
@@ -238,26 +224,6 @@ const penjualanPembelianChart = new Chart(ctx, {
         }
     }
 });
-
-// Material & Top Products AJAX update tetap sama
-function updateMaterialStok() {
-    $.get('{{ route('get.material.stok') }}', function(response) {
-        let html = '';
-        response.material.forEach(mat => {
-            html += `
-            <div class="col-md-4 col-sm-6">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-body text-center">
-                        <h5 class="fw-bold">${mat.nama_bahan}</h5>
-                        <p class="text-secondary mb-0">Stok: <strong>${mat.stok}</strong> ${mat.satuan}</p>
-                    </div>
-                </div>
-            </div>`;
-        });
-        $('.material-list').html(html);
-    });
-}
-setInterval(updateMaterialStok, 10000);
 
 function updateTopProducts() {
     $.get('{{ route('get.top.products') }}', function(response) {

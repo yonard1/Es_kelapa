@@ -80,13 +80,13 @@ class DashboardController extends Controller
                 ->select('id_produk', DB::raw('SUM(qty) as total_terjual'))
                 ->groupBy('id_produk')
                 ->orderByDesc('total_terjual')
-                ->limit(5)
+                ->take(3)
                 ->get();
 
             // ======================
             // 🧱 Material
             // ======================
-            $material = Material::limit(5)->get();
+            $material = Material::limit(3)->get();
 
             // Kirim ke view
             return view('dashboard.admin', compact(

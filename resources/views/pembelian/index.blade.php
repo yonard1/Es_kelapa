@@ -4,11 +4,24 @@
     <h3>Data Pembelian</h3>
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreatePembelian">Tambah Pembelian</button>
         @include('pembelian.modal_create')
-        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Tambah Bahan Baru</button>
-        @include('material.modal_create')
+        @if(Auth::check() && Auth::user()->hak == 'admin')
+            <button class="btn btn-success mb-3" data-bs-toggle="modal"
+            data-bs-target="#createModal">Tambah Bahan Baru</button>
+            @include('material.modal_create')
+        @endif
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     <table class="table table-bordered">

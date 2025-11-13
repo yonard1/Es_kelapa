@@ -248,9 +248,9 @@
             <h2>Es Kelapa</h2>
         </div>
 
-        <a href="{{ Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}" 
-           class="{{ request()->is('*dashboard*') ? 'active' : '' }}">
-           <img src="{{ asset('icons/house.png') }}" width="22"> Dashboard
+        <a href="{{ Auth::user()->hak === 'admin' ? route('admin.dashboard') : route('kasir.dashboard') }}"
+            class="{{ request()->is('*dashboard*') ? 'active' : '' }}">
+            <img src="{{ asset('icons/house.png') }}" width="22"> Dashboard
         </a>
 
         @if(Auth::user()->hak === 'admin')
@@ -309,7 +309,7 @@
                 <img src="{{ asset('icons/file-text.png') }}" width="22"> Laporan
             </a>
             <a href="{{ route('users.index') }}" class="{{ request()->is('users*') ? 'active' : '' }}">
-                <img src="{{ asset('icons/users.png') }}" width="22"> Admin
+                <img src="{{ asset('icons/users.png') }}" width="22"> Pengguna
             </a>
         @endif
 
@@ -337,34 +337,34 @@
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const sidebar = document.getElementById('sidebar');
-  const toggleBtn = document.getElementById('menuToggle');
-  const overlay = document.getElementById('overlay');
-  const main = document.getElementById('main');
-  const groups = document.querySelectorAll('.sidebar-group');
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('menuToggle');
+    const overlay = document.getElementById('overlay');
+    const main = document.getElementById('main');
+    const groups = document.querySelectorAll('.sidebar-group');
 
-  toggleBtn.addEventListener('click', () => {
-    if (window.innerWidth > 768) {
-      sidebar.classList.toggle('hidden');
-      main.classList.toggle('full');
-    } else {
-      sidebar.classList.toggle('active');
-      overlay.classList.toggle('active');
-    }
-  });
-
-  overlay.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-  });
-
-  groups.forEach(group => {
-    const toggle = group.querySelector('.sidebar-toggle');
-    toggle.addEventListener('click', () => {
-      groups.forEach(g => { if (g !== group) g.classList.remove('open'); });
-      group.classList.toggle('open');
+    toggleBtn.addEventListener('click', () => {
+        if (window.innerWidth > 768) {
+        sidebar.classList.toggle('hidden');
+        main.classList.toggle('full');
+        } else {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        }
     });
-  });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    groups.forEach(group => {
+        const toggle = group.querySelector('.sidebar-toggle');
+        toggle.addEventListener('click', () => {
+        groups.forEach(g => { if (g !== group) g.classList.remove('open'); });
+        group.classList.toggle('open');
+        });
+    });
 });
 </script>
 </body>

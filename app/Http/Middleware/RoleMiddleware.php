@@ -10,11 +10,23 @@ class RoleMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
+        // Kalau middleware ini dipakai tanpa role, biarkan lewat
+        if (empty($roles)) {
+            return $next($request);
+        }
+
+        // Cek berdasarkan kolom 'hak'
+        if (!in_array($request->user()->hak, $roles)) {
+            if ($request->user()->hak === 'kasir') {
+                return redirect()->route('kasir.dashboard');
+            } else {
+                return redirect()->route('admin.dashboard');
+            }
+        }
+
         return $next($request);
     }
 }

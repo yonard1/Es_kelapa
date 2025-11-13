@@ -7,7 +7,20 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
+    <form action="{{ route('transaksi.index') }}" method="GET" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Cari nama kasir...">
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="date" value="{{ $date }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Cari</button>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ route('transaksi.index') }}" class="btn btn-secondary w-100">Reset</a>
+        </div>
+    </form>
     <div class="card">
         <div class="card-body">
             <table class="table table-bordered table-striped">
