@@ -7,7 +7,6 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-
     public function index()
     {
         $products = Product::paginate(10);
@@ -22,11 +21,16 @@ class ProductController extends Controller
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
+        // 🔍 Cek duplikat nama produk
+        if (Product::where('nama_produk', $request->nama_produk)->exists()) {
+            return redirect()->back()->with('error', 'Produk dengan nama tersebut sudah ada!');
+        }
+
         $data = $request->only(['nama_produk', 'harga', 'stok']);
 
-        if($request->hasFile('foto')){
+        if ($request->hasFile('foto')) {
             $filename = time() . '.' . $request->foto->extension();
-            $request->foto->move(public_path('upload/produk'),$filename);
+            $request->foto->move(public_path('upload/produk'), $filename);
             $data['foto'] = $filename;
         }
 
@@ -36,7 +40,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-            $request->validate([
+        $request->validate([
             'nama_produk' => 'required|string|max:100',
             'harga' => 'required|numeric',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
@@ -44,15 +48,22 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
 
+        // 🔍 Cek duplikat nama produk selain dirinya sendiri
+        $cekNama = Product::where('nama_produk', $request->nama_produk)
+                          ->where('id', '!=', $id)
+                          ->exists();
+
+        if ($cekNama) {
+            return redirect()->back()->with('error', 'Nama produk sudah digunakan oleh produk lain!');
+        }
+
         $data = $request->only(['nama_produk', 'harga', 'stok']);
 
         if ($request->hasFile('foto')) {
-            // hapus foto lama kalau ada
             if ($product->foto && file_exists(public_path('upload/produk/' . $product->foto))) {
                 unlink(public_path('upload/produk/' . $product->foto));
             }
 
-            // simpan foto baru
             $filename = time() . '.' . $request->foto->extension();
             $request->foto->move(public_path('upload/produk'), $filename);
             $data['foto'] = $filename;
@@ -68,7 +79,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         if ($product->foto && file_exists(public_path('upload/produk/' . $product->foto))) {
-        unlink(public_path('upload/produk/' . $product->foto));
+            unlink(public_path('upload/produk/' . $product->foto));
         }
 
         $product->delete();

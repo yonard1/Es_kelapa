@@ -2,16 +2,19 @@
 @section('title', 'CRUD Bahan Baku')
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success mt-2">
-        {{ session('success') }}
-    </div>
-@endif
-
-
 <div class="container">
     <h2>Data Bahan</h2>
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">+ Tambah Bahan</button>
+
+    @if(session('success'))
+    <div class="alert alert-success mt-2">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 
     <table class="table table-bordered">
         <thead>
