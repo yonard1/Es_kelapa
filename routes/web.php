@@ -13,23 +13,17 @@ use App\Http\Controllers\{
     ProduksiController
 };
 
-// =====================
-// HALAMAN UMUM
-// =====================
+// ===== HALAMAN UMUM =====
 Route::get('/', fn() => view('welcome'))->name('home');
 
-// =====================
-// AUTH (Login & Register)
-// =====================
+// ===== AUTH =====
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// =====================
-// DASHBOARD
-// =====================
+// ===== DASHBOARD =====
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/kasir/dashboard', [DashboardController::class, 'index'])->name('kasir.dashboard');
@@ -37,14 +31,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-top-products', [DashboardController::class, 'getTopProducts'])->name('get.top.products');
 });
 
-// =====================
-// ADMIN ONLY
-// =====================
+// ===== ADMIN ONLY =====
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
-    // Produk, Material, Pembelian
     Route::resource('product', ProductController::class);
     Route::resource('material', MaterialController::class);
+    Route::resource('users', UserController::class);
+
+    Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
+    Route::post('/produksi', [ProduksiController::class, 'store'])->name('produksi.store');
+    Route::delete('/produksi/{id}', [ProduksiController::class, 'destroy'])->name('produksi.destroy');
+
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/download', [LaporanController::class, 'downloadPdf'])->name('laporan.download');
+});
+
+// ===== ADMIN & KASIR =====
+Route::middleware(['auth', 'role:admin,kasir'])->group(function () {
+    // Pembelian
     Route::resource('pembelian', PembelianController::class);
 
     // Transaksi
@@ -54,23 +58,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
     Route::get('/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('transaksi.cetak');
 
-    // Produksi
-    Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
-    Route::post('/produksi', [ProduksiController::class, 'store'])->name('produksi.store');
-    Route::delete('/produksi/{id}', [ProduksiController::class, 'destroy'])->name('produksi.destroy');
-
-    // User & Laporan
-    Route::resource('users', UserController::class);
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-    Route::get('/laporan/download', [LaporanController::class, 'downloadPdf'])->name('laporan.download');
-});
-
-// =====================
-// KASIR ONLY
-// =====================
-Route::middleware(['auth', 'role:kasir'])->group(function () {
-    Route::get('/kasir/transaksi-baru', [TransaksiController::class, 'create'])->name('kasir.transaksi.create');
-    Route::post('/kasir/transaksi-baru', [TransaksiController::class, 'store'])->name('kasir.transaksi.store');
-    Route::get('/kasir/riwayat', [TransaksiController::class, 'riwayat'])->name('kasir.riwayat');
-    Route::get('/kasir/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('kasir.transaksi.cetak');
+    // Riwayat transaksi (khusus kasir)
+    Route::get('/kasir/riwayat', [TransaksiController::class, 'riwayat'])->name('kasir.riwayat')->middleware('role:kasir');
 });
