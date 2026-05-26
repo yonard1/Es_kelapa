@@ -1,66 +1,44 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🥥 Sistem Informasi Penjualan Es Kelapa (Aplikasi Es Kelapa)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Informasi Penjualan Es Kelapa adalah aplikasi berbasis web yang dibangun menggunakan Laravel. Aplikasi ini dirancang untuk mendigitalisasi dan memudahkan proses pengelolaan bisnis penjualan air kelapa atau es kelapa, mulai dari manajemen stok bahan baku, pencatatan transaksi penjualan harian, hingga penyerahan laporan pendapatan secara terstruktur.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Autentikasi & Manajemen Pengguna
+*   **Sistem Hak Akses:** Pembatasan akses fitur yang aman antara pemilik bisnis (owner) dan kasir/petugas operasional.
+*   **Kontrol Peran:** Memastikan pencatatan penjualan dan pengelolaan stok hanya bisa diakses oleh pengguna yang memiliki otoritas.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Pengelolaan Stok & Bahan Baku
+*   **Manajemen Produk:** Menambah, mengubah, dan memantau ketersediaan varian menu es kelapa beserta harganya.
+*   **Pelacakan Bahan Baku:** Memantau sisa stok kelapa muda, sirup, gula, dan bahan pendukung lainnya untuk menghindari kekurangan persediaan.
 
-## Learning Laravel
+### Manajemen Transaksi Penjualan
+*   **Input Penjualan Instan:** Antarmuka kasir yang cepat untuk mencatat pesanan pelanggan secara real-time.
+*   **Kalkulasi Otomatis:** Menghitung total belanjaan, jumlah kembalian, dan memotong stok bahan baku secara otomatis saat transaksi berhasil.
+*   **Riwayat Transaksi:** Menyimpan log kronologis seluruh nota penjualan yang pernah diterbitkan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Pelaporan & Analisis Pendapatan
+*   **Dashboard Grafik:** Memvisualisasikan statistik penjualan harian atau bulanan secara interaktif untuk memantau produk terlaris.
+*   **Penyusunan Laporan:** Mengekspor laporan omzet dan keuntungan bersih ke dalam format PDF atau Excel untuk mempermudah evaluasi bisnis.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Teknologi yang Digunakan
 
-## Laravel Sponsors
+*   **Laravel Framework:** Framework PHP utama untuk menangani arsitektur dan logika bisnis aplikasi.
+*   **Vite:** Asset bundler frontend modern untuk proses pengembangan yang cepat.
+*   **Bootstrap CSS:** Framework UI untuk memastikan tampilan aplikasi responsif di perangkat komputer maupun tablet kasir.
+*   **MySQL Database:** Menyimpan data master produk, stok bahan baku, serta seluruh rekam jejak transaksi penjualan.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+---
 
-### Premium Partners
+## Instalasi
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer lokal Anda:
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clone repositori**
+```bash
+   git clone [https://github.com/yonard1/Es_kelapa.git](https://github.com/yonard1/Es_kelapa.git)
+   cd Es_kelapa
